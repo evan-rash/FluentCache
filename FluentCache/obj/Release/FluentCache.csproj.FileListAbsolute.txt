@@ -1,0 +1,5 @@
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\bin\Release\FluentCache.XML
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\bin\Release\FluentCache.dll
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\bin\Release\FluentCache.pdb
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\obj\Release\FluentCache.dll
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\obj\Release\FluentCache.pdb

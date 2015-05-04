@@ -1,0 +1,97 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentCache", "FluentCache\FluentCache.csproj", "{2AF5CE3F-41CD-4E68-8DC7-7C68C69D2405}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentCache.Test", "FluentCache.Test\FluentCache.Test.csproj", "{5FA1B9E5-45DD-4B93-A25B-F7079FC1901F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentCache.RuntimeCaching", "FluentCache.RuntimeCaching\FluentCache.RuntimeCaching.csproj", "{DE3AC658-0936-47D5-AEEF-F52AAA5C1337}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FluentCache-nuget", "FluentCache-nuget", "{E5EC6323-2185-4D8A-940A-C2321EEBC1E1}"
+	ProjectSection(SolutionItems) = preProject
+		FluentCache-nuget\FluentCache.nuspec = FluentCache-nuget\FluentCache.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{351D3F77-9722-45D9-8A2E-6E7073DE762A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "portable-net45+netcore45", "portable-net45+netcore45", "{5912FCA0-B8D4-469E-BAD3-C790F7FBE0AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net45", "net45", "{B511F8E7-3BF0-473A-BE21-93A89293A850}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netcore45", "netcore45", "{CCB3AB41-2EB5-4833-87DF-CC0708BC5D2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentCache.Redis", "FluentCache.Redis\FluentCache.Redis.csproj", "{C2A9BDCA-6DFC-4F40-BDBD-2FA6FAC61A0D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FluentCache.Redis-nuget", "FluentCache.Redis-nuget", "{BF042D65-4056-473F-88C4-B93707848E1D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{FE73BCC0-7EE1-4391-AFE0-33C2DF211E71}"
+	ProjectSection(SolutionItems) = preProject
+		FluentCache.Redis-nuget\FluentCache.Redis.nuspec = FluentCache.Redis-nuget\FluentCache.Redis.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{68F17021-7F35-4E9A-998B-C15328A2A544}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net45", "net45", "{321A4561-D336-4DB5-98E7-67BD4ACA70F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netcore45", "netcore45", "{B7E631DC-E429-4477-8EC7-2791638B1F48}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "portable-net45+netcore45", "portable-net45+netcore45", "{92D3C1C7-271D-4AE9-86EC-5E84D3F607BF}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://pickles.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = FluentCache\\FluentCache.csproj
+		SccProjectName1 = FluentCache
+		SccLocalPath1 = FluentCache
+		SccProjectUniqueName2 = FluentCache.Test\\FluentCache.Test.csproj
+		SccProjectName2 = FluentCache.Test
+		SccLocalPath2 = FluentCache.Test
+		SccProjectUniqueName3 = FluentCache.RuntimeCaching\\FluentCache.RuntimeCaching.csproj
+		SccProjectName3 = FluentCache.RuntimeCaching
+		SccLocalPath3 = FluentCache.RuntimeCaching
+		SccProjectUniqueName4 = FluentCache.Redis\\FluentCache.Redis.csproj
+		SccProjectName4 = FluentCache.Redis
+		SccLocalPath4 = FluentCache.Redis
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2AF5CE3F-41CD-4E68-8DC7-7C68C69D2405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF5CE3F-41CD-4E68-8DC7-7C68C69D2405}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF5CE3F-41CD-4E68-8DC7-7C68C69D2405}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF5CE3F-41CD-4E68-8DC7-7C68C69D2405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FA1B9E5-45DD-4B93-A25B-F7079FC1901F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FA1B9E5-45DD-4B93-A25B-F7079FC1901F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FA1B9E5-45DD-4B93-A25B-F7079FC1901F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FA1B9E5-45DD-4B93-A25B-F7079FC1901F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE3AC658-0936-47D5-AEEF-F52AAA5C1337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE3AC658-0936-47D5-AEEF-F52AAA5C1337}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE3AC658-0936-47D5-AEEF-F52AAA5C1337}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE3AC658-0936-47D5-AEEF-F52AAA5C1337}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2A9BDCA-6DFC-4F40-BDBD-2FA6FAC61A0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2A9BDCA-6DFC-4F40-BDBD-2FA6FAC61A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2A9BDCA-6DFC-4F40-BDBD-2FA6FAC61A0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2A9BDCA-6DFC-4F40-BDBD-2FA6FAC61A0D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{351D3F77-9722-45D9-8A2E-6E7073DE762A} = {E5EC6323-2185-4D8A-940A-C2321EEBC1E1}
+		{5912FCA0-B8D4-469E-BAD3-C790F7FBE0AF} = {351D3F77-9722-45D9-8A2E-6E7073DE762A}
+		{B511F8E7-3BF0-473A-BE21-93A89293A850} = {351D3F77-9722-45D9-8A2E-6E7073DE762A}
+		{CCB3AB41-2EB5-4833-87DF-CC0708BC5D2A} = {351D3F77-9722-45D9-8A2E-6E7073DE762A}
+		{FE73BCC0-7EE1-4391-AFE0-33C2DF211E71} = {BF042D65-4056-473F-88C4-B93707848E1D}
+		{68F17021-7F35-4E9A-998B-C15328A2A544} = {FE73BCC0-7EE1-4391-AFE0-33C2DF211E71}
+		{321A4561-D336-4DB5-98E7-67BD4ACA70F1} = {68F17021-7F35-4E9A-998B-C15328A2A544}
+		{B7E631DC-E429-4477-8EC7-2791638B1F48} = {68F17021-7F35-4E9A-998B-C15328A2A544}
+		{92D3C1C7-271D-4AE9-86EC-5E84D3F607BF} = {68F17021-7F35-4E9A-998B-C15328A2A544}
+	EndGlobalSection
+EndGlobal

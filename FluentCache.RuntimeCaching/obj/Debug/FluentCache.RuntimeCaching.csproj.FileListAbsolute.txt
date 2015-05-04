@@ -1,0 +1,9 @@
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache.RuntimeCaching\obj\Debug\FluentCache.RuntimeCaching.csprojResolveAssemblyReference.cache
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache.RuntimeCaching\bin\Debug\FluentCache.RuntimeCaching.XML
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache.RuntimeCaching\bin\Debug\FluentCache.RuntimeCaching.dll
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache.RuntimeCaching\bin\Debug\FluentCache.RuntimeCaching.pdb
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache.RuntimeCaching\bin\Debug\FluentCache.dll
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache.RuntimeCaching\bin\Debug\FluentCache.pdb
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache.RuntimeCaching\bin\Debug\FluentCache.xml
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache.RuntimeCaching\obj\Debug\FluentCache.RuntimeCaching.dll
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache.RuntimeCaching\obj\Debug\FluentCache.RuntimeCaching.pdb

@@ -1,0 +1,6 @@
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\bin\Debug\FluentCache.XML
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\bin\Debug\FluentCache.dll
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\bin\Debug\FluentCache.pdb
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\obj\Debug\FluentCache.dll
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\obj\Debug\FluentCache.pdb
+C:\Code\vsonline\FluentCache\FluentCache\FluentCache-master\FluentCache\obj\Debug\FluentCache.csprojResolveAssemblyReference.cache
