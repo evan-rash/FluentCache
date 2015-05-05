@@ -1,4 +1,4 @@
-# FluentCache - A Fluent Library for Caching in C#
+# FluentCache - A Fluent Library for Caching in C-Sharp
 
 FluentCache is a simple, fluent library to help you write clean, legible caching code by reducing boilerplate.
 
