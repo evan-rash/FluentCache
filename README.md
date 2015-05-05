@@ -1,5 +1,4 @@
-# FluentCache
-A Fluent Library for Caching in C#
+# FluentCache - A Fluent Library for Caching in C#
 
 FluentCache is a simple, fluent library to help you write clean, legible caching code by reducing boilerplate.
 
@@ -21,7 +20,7 @@ if (cachedValue == null)
 double result = cachedValue.Value;
 ```
 
-This code is full of boilerplate, magic strings, and is hard to read! The *intent* of the code is overwhelmed by the mechanics of how to cache the value. I hope the method names and parameters don't change, otherwise I have to remember to update the cache key!
+This code is full of boilerplate, magic strings, and is hard to read. The *intent* of the code is overwhelmed by the mechanics of how to cache the value. I hope the method names and parameters don't change, otherwise I have to remember to update the cache key!
 
 Here's the equivalent code using FluentCache
 
@@ -30,9 +29,9 @@ double ezResult = cache.Method(r => r.DoSomeHardParameterizedWork(parameter))
                        .GetValue();
 ```
 
-FluentCache automatically analyzes the expression tree an generates a unique cache key from the type, method, and any parameters.
+FluentCache automatically analyzes the expression tree and generates a unique cache key from the type, method, and any parameters and creates a caching policy that you can store or immediately execute. You can also specify various caching policies such as time-to-live, error handling, and cache invalidation.
 
-Here are some more FluentCache examples:
+# Examples:
 
 ```csharp
 //You can specify cache expiration policies
@@ -54,11 +53,9 @@ cache.Method(r => r.DoSomeHardParameterizedWork(parameter))
      .ClearValue();
 ```
 
-Getting Started
+# Getting Started
 
-To get started, you need to choose a FluentCache implementation
-FluentCache supports System.Runtime.Caching.MemoryCache out of the box
-Other cache types can implement the FluentCache.ICache interface
+To get started, you need to choose a FluentCache implementation. FluentCache supports System.Runtime.Caching.MemoryCache out of the box. Other cache types can implement the FluentCache.ICache interface.
 
 In this example, we will use the FluentMemoryCache, which is a wrapper around the System.Runtime.Caching.MemoryCache  
 
