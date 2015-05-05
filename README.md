@@ -5,7 +5,7 @@ FluentCache is a simple, fluent library to help you write clean, legible caching
 
 Here's an example of some typical caching code:
 
-```c#
+```csharp
 //I want to retrieve a value from my cache, and if it's not there load it from the repository 
 Repository repository = new Repository();
 int parameter = 5;
@@ -25,7 +25,7 @@ This code is full of boilerplate, magic strings, and is hard to read! The *inten
 
 Here's the equivalent code using FluentCache
 
-```c#
+```csharp
 double ezResult = cache.Method(r => r.DoSomeHardParameterizedWork(parameter))
                        .GetValue();
 ```
@@ -34,7 +34,7 @@ FluentCache automatically analyzes the expression tree an generates a unique cac
 
 Here are some more FluentCache examples:
 
-```c#
+```csharp
 //You can specify cache expiration policies
 double ttlValue = cache.Method(r => r.DoSomeHardWork())
                        .ExpireAfter(TimeSpan.FromMinutes(5))
@@ -62,7 +62,7 @@ Other cache types can implement the FluentCache.ICache interface
 
 In this example, we will use the FluentMemoryCache, which is a wrapper around the System.Runtime.Caching.MemoryCache  
 
-```c#
+```csharp
 ICache myCache = FluentCache.RuntimeCaching.FluentMemoryCache.Default();
 
 //Now that we have our cache, we're going to create a wrapper around our Repository
