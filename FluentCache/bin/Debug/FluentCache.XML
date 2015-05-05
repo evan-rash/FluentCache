@@ -126,6 +126,26 @@
             Asynchronously gets all cached values
             </summary>
         </member>
+        <member name="T:FluentCache.CacheOperation">
+            <summary>
+            Defines a list of caching operations
+            </summary>
+        </member>
+        <member name="F:FluentCache.CacheOperation.Get">
+            <summary>
+            Getting a value from the cache
+            </summary>
+        </member>
+        <member name="F:FluentCache.CacheOperation.Set">
+            <summary>
+            Setting a value in the cache
+            </summary>
+        </member>
+        <member name="F:FluentCache.CacheOperation.Remove">
+            <summary>
+            Removing a value from the cache
+            </summary>
+        </member>
         <member name="T:FluentCache.CacheStrategyAsync`1">
             <summary>
             A strategy to asynchronously access or modify strongly-typed data in a Cache
@@ -202,6 +222,47 @@
             </summary>
             <param name="value">The value to be cached</param>
         </member>
+        <member name="T:FluentCache.CachingFailedCachedValue">
+            <summary>
+            Represents a cached value that was generated from a failed caching operation
+            </summary>
+        </member>
+        <member name="M:FluentCache.CachingFailedCachedValue.Create``1(``0)">
+            <summary>
+            Creates a new ICachedValue wrapper around the specified value
+            </summary>
+        </member>
+        <member name="T:FluentCache.ICachedValue`1">
+            <summary>
+            A strongly typed value that has been retrieved from a cache
+            </summary>
+            <typeparam name="T">The type of the vaue that is to be retrieved</typeparam>
+        </member>
+        <member name="T:FluentCache.ICachedValue">
+            <summary>
+            A value that has been retrieved from a cache
+            </summary>
+        </member>
+        <member name="P:FluentCache.ICachedValue.CachedDate">
+            <summary>
+            Gets the date the value was first cached
+            </summary>
+        </member>
+        <member name="P:FluentCache.ICachedValue.LastValidatedDate">
+            <summary>
+            Gets the date the cached value was last validated, or null if it has not been validated
+            </summary>
+        </member>
+        <member name="P:FluentCache.ICachedValue.Value">
+            <summary>
+            Gets the cached value
+            </summary>
+        </member>
+        <member name="P:FluentCache.ICachedValue`1.Value">
+            <summary>
+            Gets the cached value
+            </summary>
+        </member>
         <member name="T:FluentCache.DefaultParameterCacheKeyProvider">
             <summary>
             DefaultParameterCacheKeyProvider provides a simple and standard mechanism for generating parameter cache key values
@@ -211,6 +272,12 @@
             <summary>
             Defines how cache strategies should generate caching keys for parameter values
             </summary>
+        </member>
+        <member name="M:FluentCache.IParameterCacheKeyProvider.GenerateParameterCacheKey(System.Object)">
+            <summary>
+            Generate a cache key for the specified parameter
+            </summary>
+            <returns>a string representation of the parameter that is used in generating a unique cache key for a cache strategy</returns>
         </member>
         <member name="M:FluentCache.DefaultParameterCacheKeyProvider.GenerateParameterCacheKey(System.Object)">
             <summary>
@@ -257,6 +324,31 @@
             Constructs a new instance with the specified message and inner exception
             </summary>
         </member>
+        <member name="T:FluentCache.ICachedValueWithVersion">
+            <summary>
+            A value that has been retrieved from a cache that also includes an auto-incrementing version
+            </summary>
+        </member>
+        <member name="P:FluentCache.ICachedValueWithVersion.Version">
+            <summary>
+            Returns an auto-incrementing sequence value indicating which version of the cached value is returned
+            </summary>
+        </member>
+        <member name="T:FluentCache.ICachedValueWithVersion`1">
+            <summary>
+            A strongly-typed value that has been retrieved from a cache that also includes an auto-incrementing version
+            </summary>
+        </member>
+        <member name="T:FluentCache.IUpdateLastValidatedDate">
+            <summary>
+            Allows a caching implementation to update the last validated date of a cached value. This is an internal interface not intended for direct public consumption
+            </summary>
+        </member>
+        <member name="M:FluentCache.IUpdateLastValidatedDate.MarkAsValidated(FluentCache.ICachedValue,System.DateTime)">
+            <summary>
+            Mark the specified cached value as updated
+            </summary>
+        </member>
         <member name="T:FluentCache.RetrievalErrorHandlerResult`1">
             <summary>
             Defines the result of a retrieval error handler
@@ -294,6 +386,13 @@
             </summary>
         </member>
         <member name="M:FluentCache.CacheStrategyIncomplete.Retrieve``1(System.Func{``0})">
+            <summary>
+            Specifies a data retrieval strategy if the desired value does not exist in the cache or is invalid
+            </summary>
+            <param name="retrieve">A delegate that specifies how the value is to be retrieved</param>
+            <returns>An updated cache strategy that includes the retrieval strategy</returns>
+        </member>
+        <member name="M:FluentCache.CacheStrategyIncomplete.RetrieveUsing``1(System.Func{``0})">
             <summary>
             Specifies a data retrieval strategy if the desired value does not exist in the cache or is invalid
             </summary>
@@ -602,9 +701,19 @@
             Use the previous cached value (or a default value if there is no previous value) if the retrieval mechanism failed
             </summary>
         </member>
+        <member name="M:FluentCache.CacheExtensions.Method``2(FluentCache.ICache{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Returns a caching strategy for the specified method. The cache source type and method name will be used for the cache key and the method will be used as the retrieval mechanism
+            </summary>
+        </member>
         <member name="M:FluentCache.CacheExtensions.Result``2(FluentCache.ICache{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>
             Returns a caching strategy for the specified method. The cache source type and method name will be used for the cache key and the method will be used as the retrieval mechanism
+            </summary>
+        </member>
+        <member name="M:FluentCache.CacheExtensions.Method``2(FluentCache.ICache{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task{``1}}})">
+            <summary>
+            Returns an async caching strategy for the specified method. The cache source type and method name will be used for the cache key and the method will be used as the retrieval mechanism if the item is not found in the cache
             </summary>
         </member>
         <member name="M:FluentCache.CacheExtensions.Result``2(FluentCache.ICache{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task{``1}}})">
@@ -612,9 +721,19 @@
             Returns an async caching strategy for the specified method. The cache source type and method name will be used for the cache key and the method will be used as the retrieval mechanism if the item is not found in the cache
             </summary>
         </member>
+        <member name="M:FluentCache.CacheExtensions.Method``3(FluentCache.ICache{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Collections.Generic.ICollection{System.Collections.Generic.KeyValuePair{``1,``2}}}})">
+            <summary>
+            Returns a caching strategy that cached individual items returned from the method by their specified key. The cache source type, method name, and item key will be used for the cache key and the method will be used as the retrieval mechanism for items not found in the cache
+            </summary>
+        </member>
         <member name="M:FluentCache.CacheExtensions.Results``3(FluentCache.ICache{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Collections.Generic.ICollection{System.Collections.Generic.KeyValuePair{``1,``2}}}})">
             <summary>
             Returns a caching strategy that cached individual items returned from the method by their specified key. The cache source type, method name, and item key will be used for the cache key and the method will be used as the retrieval mechanism for items not found in the cache
+            </summary>
+        </member>
+        <member name="M:FluentCache.CacheExtensions.Method``3(FluentCache.ICache{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task{System.Collections.Generic.ICollection{System.Collections.Generic.KeyValuePair{``1,``2}}}}})">
+            <summary>
+            Returns an async caching strategy that cached individual items returned from the method by their specified key. The cache source type, method name, and item key will be used for the cache key and the method will be used as the retrieval mechanism for items not found in the cache
             </summary>
         </member>
         <member name="M:FluentCache.CacheExtensions.Results``3(FluentCache.ICache{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task{System.Collections.Generic.ICollection{System.Collections.Generic.KeyValuePair{``1,``2}}}}})">
@@ -696,6 +815,15 @@
             <param name="key">A key identifying the value that is to be retrieved</param>
             <param name="region">A region used to group related data elements</param>
         </member>
+        <member name="M:FluentCache.ICache.TryHandleCachingFailure(FluentCache.FluentCacheException,FluentCache.CacheOperation)">
+            <summary>
+            Attempts to handle an error while attempting to get, set, or remove an item from the cache.
+            Returning true indicates that the exception is handled, false indicates the exception is unhandled and should be re-thrown
+            </summary>
+            <param name="exception">The exception that was encountered</param>
+            <param name="cacheOperation">The operation where the failure occured</param>
+            <returns>True to indicate the exception has been handled, false to indicate the exception is unhandled and should be re-thrown</returns>
+        </member>
         <member name="P:FluentCache.ICache.ParameterCacheKeyProvider">
             <summary>
             Determines how cache keys should be generated for parameter values
@@ -704,47 +832,6 @@
         <member name="P:FluentCache.ICache`1.Source">
             <summary>
             Gets the object whose calls will be cached. typeof(TSource).Name will be used as the default region
-            </summary>
-        </member>
-        <member name="T:FluentCache.ICachedValue">
-            <summary>
-            A value that has been retrieved from a cache
-            </summary>
-        </member>
-        <member name="P:FluentCache.ICachedValue.CachedDate">
-            <summary>
-            Gets the date the value was first cached
-            </summary>
-        </member>
-        <member name="P:FluentCache.ICachedValue.LastValidatedDate">
-            <summary>
-            Gets the date the cached value was last validated, or null if it has not been validated
-            </summary>
-        </member>
-        <member name="P:FluentCache.ICachedValue.Value">
-            <summary>
-            Gets the cached value
-            </summary>
-        </member>
-        <member name="T:FluentCache.IUpdateLastValidatedDate">
-            <summary>
-            Allows a caching implementation to update the last validated date of a cached value. This is an internal interface not intended for direct public consumption
-            </summary>
-        </member>
-        <member name="M:FluentCache.IUpdateLastValidatedDate.MarkAsValidated(System.DateTime)">
-            <summary>
-            Mark the specified cached value as updated
-            </summary>
-        </member>
-        <member name="T:FluentCache.ICachedValue`1">
-            <summary>
-            A strongly typed value that has been retrieved from a cache
-            </summary>
-            <typeparam name="T">The type of the vaue that is to be retrieved</typeparam>
-        </member>
-        <member name="P:FluentCache.ICachedValue`1.Value">
-            <summary>
-            Gets the cached value
             </summary>
         </member>
         <member name="T:FluentCache.MethodCacheStrategy`1">

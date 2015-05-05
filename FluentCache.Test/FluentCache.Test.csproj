@@ -74,6 +74,7 @@
     <Compile Include="CacheFailureTests.cs" />
     <Compile Include="CacheStrategyTests.cs" />
     <Compile Include="ErrorHandlerTests.cs" />
+    <Compile Include="ExampleTests.cs" />
     <Compile Include="ParameterCacheKeyProviderTests.cs" />
     <Compile Include="ClosureTest.cs" />
     <Compile Include="MethodTests.cs" />

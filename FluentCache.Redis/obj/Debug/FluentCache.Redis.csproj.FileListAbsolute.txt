@@ -1,0 +1,13 @@
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\FluentCache.Redis.dll
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\FluentCache.Redis.pdb
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\FluentCache.dll
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\Newtonsoft.Json.dll
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\StackExchange.Redis.dll
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\FluentCache.pdb
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\FluentCache.xml
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\Newtonsoft.Json.xml
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\StackExchange.Redis.pdb
+C:\Code\github\FluentCache\FluentCache.Redis\bin\Debug\StackExchange.Redis.xml
+C:\Code\github\FluentCache\FluentCache.Redis\obj\Debug\FluentCache.Redis.csprojResolveAssemblyReference.cache
+C:\Code\github\FluentCache\FluentCache.Redis\obj\Debug\FluentCache.Redis.dll
+C:\Code\github\FluentCache\FluentCache.Redis\obj\Debug\FluentCache.Redis.pdb
