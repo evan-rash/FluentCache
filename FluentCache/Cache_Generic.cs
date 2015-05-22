@@ -85,5 +85,13 @@ namespace FluentCache
         {
             _cache.MarkAsValidated(key, region);
         }
+
+        /// <summary>
+        /// Creates an execution plan for retrieving the cached value
+        /// </summary>
+        public override Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
+        {
+            return _cache.CreateExecutionPlan<T>(cacheStrategy);
+        }
     }
 }

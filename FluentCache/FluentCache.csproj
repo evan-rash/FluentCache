@@ -45,9 +45,16 @@
   <ItemGroup>
     <Compile Include="CachedValue.cs" />
     <Compile Include="CacheExpiration.cs" />
+    <Compile Include="Execution\CacheExceptionHandler.cs" />
+    <Compile Include="Execution\CircuitBreakerCacheExecutionPlan.cs" />
+    <Compile Include="CircuitBreaker\CircuitBreakerState.cs" />
+    <Compile Include="CircuitBreaker\ICircuitBreakerState.cs" />
+    <Compile Include="CircuitBreaker\TimedLock.cs" />
+    <Compile Include="Execution\ICacheExceptionHandler.cs" />
+    <Compile Include="Execution\ICacheExecutionPlan.cs" />
     <Compile Include="ICacheStrategyAsync.cs" />
     <Compile Include="ICacheStrategy.cs" />
-    <Compile Include="CacheExecutionPlan.cs" />
+    <Compile Include="Execution\CacheExecutionPlan.cs" />
     <Compile Include="CacheOperation.cs" />
     <Compile Include="Simple\FluentDictionaryCache.cs" />
     <Compile Include="Strategies\BulkCacheStrategy.cs" />

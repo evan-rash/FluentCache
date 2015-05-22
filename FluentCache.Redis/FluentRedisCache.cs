@@ -19,9 +19,11 @@ namespace FluentCache.Redis
         public FluentRedisCache(ConnectionMultiplexer redis)
         {
             Redis = redis;
+            ExceptionHandler = Execution.CacheExceptionHandler.FromPredicate(IsRedisException);
         }
 
         private readonly ConnectionMultiplexer Redis;
+        private readonly Execution.ICacheExceptionHandler ExceptionHandler;
 
         private class Hashes
         {
@@ -225,6 +227,19 @@ namespace FluentCache.Redis
         public override void Remove(string key, string region)
         {
             RemoveRedis(key, region);
+        }
+
+        /// <summary>
+        /// Creates an execution plan for retrieving the cached value
+        /// </summary>
+        public override Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
+        {
+            return new FluentCache.Execution.CircuitBreakerCacheExecutionPlan<T>(this, ExceptionHandler, cacheStrategy);
+        }
+
+        private static bool IsRedisException(FluentCacheException ex)
+        {
+            return ex.InnerException is StackExchange.Redis.RedisException;
         }
     }
 }

@@ -64,9 +64,9 @@ namespace FluentCache
         /// <summary>
         /// Creates an execution plan for the specified caching strategy
         /// </summary>
-        public virtual CacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
+        public virtual Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
         {
-            return new CacheExecutionPlan<T>(this, cacheStrategy);
+            return new Execution.CacheExecutionPlan<T>(this, Execution.CacheExceptionHandler.Default, cacheStrategy);
         }
     }
 

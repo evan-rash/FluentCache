@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="BulkCacheTests.cs" />
     <Compile Include="CacheTester.cs" />
+    <Compile Include="CircuitBreakerTests.cs" />
     <Compile Include="ErrorHandlerTests.cs" />
     <Compile Include="ExampleTests.cs" />
     <Compile Include="ClosureTest.cs" />

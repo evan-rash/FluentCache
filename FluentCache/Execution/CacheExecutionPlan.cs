@@ -4,27 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FluentCache
+namespace FluentCache.Execution
 {
     /// <summary>
     /// Defines an execution plan for getting a value from a cache, validating, and retrieving a new value
     /// </summary>
     /// <typeparam name="T">The type of value that is cached</typeparam>
-    public class CacheExecutionPlan<T>
+    public class CacheExecutionPlan<T> : ICacheExecutionPlan<T>
     {
         /// <summary>
         /// Constructs a new instance of the execution plan
         /// </summary>
-        public CacheExecutionPlan(Cache cache, ICacheStrategy<T> cacheStrategy)
+        public CacheExecutionPlan(Cache cache, ICacheExceptionHandler exceptionHandler, ICacheStrategy<T> cacheStrategy)
         {
             _cache = cache;
+            _exceptionHandler = exceptionHandler;
             _cacheStrategy = cacheStrategy;
             _cacheStrategyAsync = cacheStrategy as ICacheStrategyAsync<T>;
         }
 
         private readonly Cache _cache;
+        private readonly ICacheExceptionHandler _exceptionHandler;
         private readonly ICacheStrategy<T> _cacheStrategy;
         private readonly ICacheStrategyAsync<T> _cacheStrategyAsync;
+
+        /// <summary>
+        /// Gets the exception handler
+        /// </summary>
+        protected ICacheExceptionHandler ExceptionHandler { get { return _exceptionHandler; } }
 
         /// <summary>
         /// Gets the Key that will be used in combination with the Region to retrieve the value from the cache
@@ -45,16 +52,6 @@ namespace FluentCache
         /// Gets the expiration policy
         /// </summary>
         public CacheExpiration Expiration { get { return _cacheStrategy.Expiration; } }
-
-        /// <summary>
-        /// Attempts to handle a failure that occured during caching. Return true to indicate that the error was handled and false to indicate the error is unhandled and needs to be propogated further
-        /// </summary>
-        /// <param name="cacheException">The exception that occurred during caching</param>
-        /// <returns>true to indicate the error was handled, false to indicate it is unhandled</returns>
-        protected virtual bool TryHandleCachingFailure(FluentCacheException cacheException)
-        {
-            return false;
-        }
         
         /// <summary>
         /// Retrieves the value if it is not in the cache
@@ -113,7 +110,7 @@ namespace FluentCache
         /// <summary>
         /// Executes the plan
         /// </summary>
-        public CachedValue<T> Execute()
+        public virtual CachedValue<T> Execute()
         {
             CachedValue<T> cachedValue = null;
             try
@@ -129,7 +126,7 @@ namespace FluentCache
             }
             catch (FluentCache.FluentCacheException cacheException)
             {
-                if (!TryHandleCachingFailure(cacheException))
+                if (!ExceptionHandler.TryHandleCachingFailure(cacheException))
                     throw;
                 else
                     return null;
@@ -139,7 +136,7 @@ namespace FluentCache
         /// <summary>
         /// Asynchronously executes the plan
         /// </summary>
-        public async Task<CachedValue<T>> ExecuteAsync()
+        public virtual async Task<CachedValue<T>> ExecuteAsync()
         {
             CachedValue<T> cachedValue = null;
             try
@@ -155,7 +152,7 @@ namespace FluentCache
             }
             catch (FluentCache.FluentCacheException cacheException)
             {
-                if (!TryHandleCachingFailure(cacheException))
+                if (!ExceptionHandler.TryHandleCachingFailure(cacheException))
                     throw;
                 else
                     return null;

@@ -27,7 +27,7 @@ namespace FluentCache.Strategies
         /// <returns>A task containing the cached value wrapper</returns>
         public async Task<CachedValue<T>> GetAsync()
         {
-            CacheExecutionPlan<T> plan = Cache.CreateExecutionPlan<T>(this);
+            Execution.ICacheExecutionPlan<T> plan = Cache.CreateExecutionPlan<T>(this);
             return await plan.ExecuteAsync();
         }
 

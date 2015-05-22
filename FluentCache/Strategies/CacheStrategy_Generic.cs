@@ -28,7 +28,7 @@ namespace FluentCache.Strategies
         /// <returns>The cached value wrapper</returns>
         public CachedValue<T> Get()
         {
-            CacheExecutionPlan<T> plan = Cache.CreateExecutionPlan(this);
+            Execution.ICacheExecutionPlan<T> plan = Cache.CreateExecutionPlan(this);
             return plan.Execute();
         }
 
