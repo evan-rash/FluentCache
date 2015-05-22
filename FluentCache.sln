@@ -25,11 +25,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentCache.Redis", "FluentCache.Redis\FluentCache.Redis.csproj", "{C2A9BDCA-6DFC-4F40-BDBD-2FA6FAC61A0D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FluentCache.Redis-nuget", "FluentCache.Redis-nuget", "{BF042D65-4056-473F-88C4-B93707848E1D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{FE73BCC0-7EE1-4391-AFE0-33C2DF211E71}"
 	ProjectSection(SolutionItems) = preProject
 		FluentCache.Redis-nuget\FluentCache.Redis.nuspec = FluentCache.Redis-nuget\FluentCache.Redis.nuspec
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{FE73BCC0-7EE1-4391-AFE0-33C2DF211E71}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{68F17021-7F35-4E9A-998B-C15328A2A544}"
 EndProject
