@@ -62,7 +62,7 @@ Other cache implementations can implement the FluentCache.Cache base class
 In this example, we will use the FluentMemoryCache to illustrate the various Fluent extension methods provided by the API
 
 ```csharp
-Cache myCache = FluentCache.RuntimeCaching.FluentMemoryCache.Default();
+ICache myCache = FluentCache.RuntimeCaching.FluentMemoryCache.Default();
 
 //Now that we have our cache, we're going to create a wrapper around our Repository
 //The wrapper will allow us to cache the results of various Repository methods
