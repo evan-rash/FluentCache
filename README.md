@@ -11,11 +11,11 @@ int parameter = 5;
 string region = "FluentCacheExamples";
 string cacheKey = "Samples.DoSomeHardParameterizedWork." + parameter;
 
-ICachedValue<double> cachedValue = cache.Get<double>(cacheKey, region);
+CachedValue<double> cachedValue = cache.Get<double>(cacheKey, region);
 if (cachedValue == null)
 {
     double val = repository.DoSomeHardParameterizedWork(parameter);
-    cachedValue = cache.Set<double>(cacheKey, region, val, new CachePolicy());
+    cachedValue = cache.Set<double>(cacheKey, region, val, new CacheExpiration());
 }
 double result = cachedValue.Value;
 ```
@@ -60,12 +60,12 @@ To get started, you need to choose a FluentCache implementation. FluentCache sup
 In this example, we will use the FluentMemoryCache, which is a wrapper around the System.Runtime.Caching.MemoryCache  
 
 ```csharp
-ICache myCache = FluentCache.RuntimeCaching.FluentMemoryCache.Default();
+Cache myCache = FluentCache.RuntimeCaching.FluentMemoryCache.Default();
 
 //Now that we have our cache, we're going to create a wrapper around our Repository
 //The wrapper will allow us to cache the results of various Repository methods
 Repository repo = new Repository();
-ICache<Repository> myRepositoryCache = myCache.WithSource(repo);
+Cache<Repository> myRepositoryCache = myCache.WithSource(repo);
 
 //Now that we have a wrapper, we can create and execute a CacheStrategy
 string resource = myRepositoryCache.Method(r => r.RetrieveResource())
