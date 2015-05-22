@@ -12,17 +12,17 @@ namespace FluentCache.Strategies
     /// </summary>
     public class CacheStrategy
     {
-        internal CacheStrategy(Cache cache, string baseKey)
+        internal CacheStrategy(ICache cache, string baseKey)
         {
             _Cache = cache;
             _BaseKey = baseKey;
             Parameters = new List<object>();
         }
 
-        private readonly Cache _Cache;
+        private readonly ICache _Cache;
         private readonly string _BaseKey;
 
-        internal Cache Cache { get { return _Cache; } }
+        internal ICache Cache { get { return _Cache; } }
         internal string BaseKey { get { return _BaseKey; } }
 
         internal IReadOnlyList<object> Parameters { get; set; }

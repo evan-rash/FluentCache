@@ -10,7 +10,7 @@ namespace FluentCache.Strategies
 
     internal class BulkMethodCacheStrategy<TKey, TResult> : BulkCacheStrategyIncomplete<TKey, TResult>
     {
-        internal BulkMethodCacheStrategy(Cache cache, Func<ICollection<TKey>, ICollection<KeyValuePair<TKey, TResult>>> bulkGetMethod, string baseKey, ICollection<TKey> keys)
+        internal BulkMethodCacheStrategy(ICache cache, Func<ICollection<TKey>, ICollection<KeyValuePair<TKey, TResult>>> bulkGetMethod, string baseKey, ICollection<TKey> keys)
             : base(cache, baseKey, keys)
         {
             Method = bulkGetMethod;
@@ -26,7 +26,7 @@ namespace FluentCache.Strategies
 
     internal class AsyncBulkMethodCacheStrategy<TKey, TResult> : BulkCacheStrategyIncomplete<TKey, TResult>
     {
-        internal AsyncBulkMethodCacheStrategy(Cache cache, Func<ICollection<TKey>, Task<ICollection<KeyValuePair<TKey, TResult>>>> bulkGetMethod, string baseKey, ICollection<TKey> keys)
+        internal AsyncBulkMethodCacheStrategy(ICache cache, Func<ICollection<TKey>, Task<ICollection<KeyValuePair<TKey, TResult>>>> bulkGetMethod, string baseKey, ICollection<TKey> keys)
             : base(cache, baseKey, keys)
         {
             Method = bulkGetMethod;

@@ -12,7 +12,7 @@ namespace FluentCache.Strategies
     /// </summary>
     public class CacheStrategyIncomplete : SingleValueCacheStrategy
     {
-        internal CacheStrategyIncomplete(Cache cache, string baseKey)
+        internal CacheStrategyIncomplete(ICache cache, string baseKey)
             : base(cache, baseKey)
         {
         }

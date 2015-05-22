@@ -11,7 +11,7 @@ namespace FluentCache.Strategies
     /// </summary>
     internal class MethodCacheStrategy<TResult> : CacheStrategyIncomplete
     {
-        internal MethodCacheStrategy(Cache cache, Func<TResult> method, string baseKey)
+        internal MethodCacheStrategy(ICache cache, Func<TResult> method, string baseKey)
             : base(cache, baseKey)
         {
             Method = method;
@@ -52,7 +52,7 @@ namespace FluentCache.Strategies
     /// </summary>
     public class AsyncMethodCacheStrategy<TResult> : CacheStrategyIncomplete
     {
-        internal AsyncMethodCacheStrategy(Cache cache, Func<Task<TResult>> method, string baseKey)
+        internal AsyncMethodCacheStrategy(ICache cache, Func<Task<TResult>> method, string baseKey)
             : base(cache, baseKey)
         {
             Method = method;

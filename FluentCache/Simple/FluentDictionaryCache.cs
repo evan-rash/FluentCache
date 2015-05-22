@@ -10,7 +10,7 @@ namespace FluentCache.Simple
     /// <summary>
     /// A simple Cache implementation that uses Dictionary to cache values
     /// </summary>
-    public class FluentDictionaryCache : Cache
+    public class FluentDictionaryCache : ICache
     {
         /// <summary>
         /// Constructs a new instance
@@ -25,7 +25,7 @@ namespace FluentCache.Simple
         /// <summary>
         /// Gets the specified cached value
         /// </summary>
-        public override CachedValue<T> Get<T>(string key, string region)
+        public virtual CachedValue<T> Get<T>(string key, string region)
         {
             string k = GetCacheKey(key, region);
             Storage storage;
@@ -47,7 +47,7 @@ namespace FluentCache.Simple
         /// <summary>
         /// Sets the specified cached value
         /// </summary>
-        public override CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration)
+        public virtual CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration)
         {
             DateTime now = DateTime.UtcNow;
             string k = GetCacheKey(key, region);
@@ -78,7 +78,7 @@ namespace FluentCache.Simple
         /// <summary>
         /// Removes the specified cached value
         /// </summary>
-        public override void Remove(string key, string region)
+        public virtual void Remove(string key, string region)
         {
             string k = GetCacheKey(key, region);
             Storage storage;
@@ -88,7 +88,7 @@ namespace FluentCache.Simple
         /// <summary>
         /// Marks the specified cached value as validated
         /// </summary>
-        protected internal override void MarkAsValidated(string key, string region)
+        public virtual void MarkAsValidated(string key, string region)
         {
             DateTime now = DateTime.UtcNow;
             Func<string, Storage, Storage> updateLastModifiedDate = (newKey, existing) =>
@@ -102,6 +102,27 @@ namespace FluentCache.Simple
 
             //Note: if the caller tries to mark validated for a non-existing item then we will just insert a null Storage object
             Dictionary.AddOrUpdate(key, default(Storage), updateLastModifiedDate);
+        }
+
+        /// <summary>
+        /// Gets the cache key for a parameter value
+        /// </summary>
+        public virtual string GetParameterCacheKeyValue(object parameterValue)
+        {
+            return parameterValue == null ? String.Empty : parameterValue.ToString();
+        }
+
+        private string GetCacheKey(string key, string region)
+        {
+            return region + ":" + key;
+        }
+
+        /// <summary>
+        /// Creates an execution plan for the cache strategy
+        /// </summary>
+        public virtual Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
+        {
+            return new Execution.CacheExecutionPlan<T>(this, Execution.CacheExceptionHandler.Default, cacheStrategy);
         }
 
         private class Storage

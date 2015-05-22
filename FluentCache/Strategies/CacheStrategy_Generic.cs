@@ -13,7 +13,7 @@ namespace FluentCache.Strategies
     /// <typeparam name="T">The type of the data in the Cache</typeparam>
     public class CacheStrategy<T> : SingleValueCacheStrategy, ICacheStrategy<T>
     {
-        internal CacheStrategy(Cache cache, string baseKey)
+        internal CacheStrategy(ICache cache, string baseKey)
             : base(cache, baseKey)
         {
         }

@@ -11,7 +11,7 @@ namespace FluentCache.Strategies
     /// </summary>
     public class BulkCacheStrategyAsync<TKey, TResult> : BulkCacheStrategyIncomplete<TKey, TResult>
     {
-        internal BulkCacheStrategyAsync(Cache cache, string baseKey, ICollection<TKey> keys)
+        internal BulkCacheStrategyAsync(ICache cache, string baseKey, ICollection<TKey> keys)
             : base(cache, baseKey, keys)
         {
         }

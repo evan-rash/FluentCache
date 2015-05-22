@@ -11,7 +11,7 @@ namespace FluentCache.Strategies
     /// </summary>
     public sealed class CacheStrategyParameterized<P1> : CacheStrategyIncomplete
     {
-        internal CacheStrategyParameterized(Cache cache, string baseKey)
+        internal CacheStrategyParameterized(ICache cache, string baseKey)
             : base(cache, baseKey)
         {
         }
@@ -52,7 +52,7 @@ namespace FluentCache.Strategies
     /// </summary>
     public sealed class CacheStrategyParameterized<P1, P2> : CacheStrategyIncomplete
     {
-        internal CacheStrategyParameterized(Cache cache, string baseKey)
+        internal CacheStrategyParameterized(ICache cache, string baseKey)
             : base(cache, baseKey)
         {
         }
@@ -96,7 +96,7 @@ namespace FluentCache.Strategies
     /// </summary>
     public sealed class CacheStrategyParameterized<P1, P2, P3> : CacheStrategyIncomplete
     {
-        internal CacheStrategyParameterized(Cache cache, string baseKey)
+        internal CacheStrategyParameterized(ICache cache, string baseKey)
             : base(cache, baseKey)
         {
         }
@@ -142,7 +142,7 @@ namespace FluentCache.Strategies
     /// </summary>
     public sealed class CacheStrategyParameterized<P1, P2, P3, P4> : CacheStrategyIncomplete
     {
-        internal CacheStrategyParameterized(Cache cache, string baseKey)
+        internal CacheStrategyParameterized(ICache cache, string baseKey)
             : base(cache, baseKey)
         {
         }

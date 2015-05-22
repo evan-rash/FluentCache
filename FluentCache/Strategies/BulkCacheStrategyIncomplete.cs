@@ -11,7 +11,7 @@ namespace FluentCache.Strategies
     /// </summary>
     public class BulkCacheStrategyIncomplete<TKey, TResult> : CacheStrategy
     {
-        internal BulkCacheStrategyIncomplete(Cache cache, string baseKey, ICollection<TKey> keys)
+        internal BulkCacheStrategyIncomplete(ICache cache, string baseKey, ICollection<TKey> keys)
             : base(cache, baseKey)
         {
             Keys = keys.ToList();

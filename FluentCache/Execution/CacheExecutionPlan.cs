@@ -15,7 +15,7 @@ namespace FluentCache.Execution
         /// <summary>
         /// Constructs a new instance of the execution plan
         /// </summary>
-        public CacheExecutionPlan(Cache cache, ICacheExceptionHandler exceptionHandler, ICacheStrategy<T> cacheStrategy)
+        public CacheExecutionPlan(ICache cache, ICacheExceptionHandler exceptionHandler, ICacheStrategy<T> cacheStrategy)
         {
             _cache = cache;
             _exceptionHandler = exceptionHandler;
@@ -23,7 +23,7 @@ namespace FluentCache.Execution
             _cacheStrategyAsync = cacheStrategy as ICacheStrategyAsync<T>;
         }
 
-        private readonly Cache _cache;
+        private readonly ICache _cache;
         private readonly ICacheExceptionHandler _exceptionHandler;
         private readonly ICacheStrategy<T> _cacheStrategy;
         private readonly ICacheStrategyAsync<T> _cacheStrategyAsync;
@@ -46,7 +46,7 @@ namespace FluentCache.Execution
         /// <summary>
         /// Gets the cache that will be used to retrieve the value
         /// </summary>
-        public Cache Cache { get { return _cache; } }
+        public ICache Cache { get { return _cache; } }
         
         /// <summary>
         /// Gets the expiration policy

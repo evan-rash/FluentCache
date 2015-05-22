@@ -12,7 +12,7 @@ namespace FluentCache.Strategies
     /// <typeparam name="T"></typeparam>
     public class CacheStrategyAsync<T> : SingleValueCacheStrategy, ICacheStrategyAsync<T>
     {
-        internal CacheStrategyAsync(Cache cache, string baseKey)
+        internal CacheStrategyAsync(ICache cache, string baseKey)
             : base(cache, baseKey)
         {
         }

@@ -10,13 +10,13 @@ namespace FluentCache.RuntimeCaching
     /// <summary>
     /// Provides a FluentCache.ICache wrapper around the System.Runtime.Caching.MemoryCache
     /// </summary>
-    public class FluentMemoryCache : Cache
+    public class FluentMemoryCache : ICache
     {
         /// <summary>
         /// Creates a new FluentMemoryCache wrapper around MemoryCache.Default
         /// </summary>
         /// <returns></returns>
-        public static Cache Default()
+        public static ICache Default()
         {
             return new FluentMemoryCache(MemoryCache.Default);
         }
@@ -60,7 +60,7 @@ namespace FluentCache.RuntimeCaching
         /// <summary>
         /// Gets the specified cached value
         /// </summary>
-        public override CachedValue<T> Get<T>(string key, string region)
+        public CachedValue<T> Get<T>(string key, string region)
         {
             string k = GetCacheKey(key, region);
             Storage storage = MemoryCache.Get(k) as Storage;
@@ -73,7 +73,7 @@ namespace FluentCache.RuntimeCaching
         /// <summary>
         /// Sets the specified cached value
         /// </summary>
-        public override CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration)
+        public CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration)
         {
             DateTime now = DateTime.UtcNow;
             string k = GetCacheKey(key, region);
@@ -108,7 +108,7 @@ namespace FluentCache.RuntimeCaching
         /// <summary>
         /// Removes the specified cached value
         /// </summary>
-        public override void Remove(string key, string region)
+        public void Remove(string key, string region)
         {
             string k = GetCacheKey(key, region);
             MemoryCache.Remove(k);
@@ -117,13 +117,34 @@ namespace FluentCache.RuntimeCaching
         /// <summary>
         /// Marks the specified cached value as modified
         /// </summary>
-        protected override void MarkAsValidated(string key, string region)
+        public void MarkAsValidated(string key, string region)
         {
             DateTime now = DateTime.UtcNow;
             string k = GetCacheKey(key, region);
             Storage storage = MemoryCache.Get(k) as Storage;
             if (storage != null)
                 storage.LastValidatedDate = now;
+        }
+
+        /// <summary>
+        /// Generates a unique key for the parameter value
+        /// </summary>
+        public virtual string GetParameterCacheKeyValue(object parameterValue)
+        {
+            return parameterValue == null ? String.Empty : parameterValue.ToString();
+        }
+
+        /// <summary>
+        /// Creates an execution plan for retrieving a cached value
+        /// </summary>
+        public virtual Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
+        {
+            return new Execution.CacheExecutionPlan<T>(this, Execution.CacheExceptionHandler.Default, cacheStrategy);
+        }
+
+        private string GetCacheKey(string key, string region)
+        {
+            return region + ":" + key;
         }
     }
 }

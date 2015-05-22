@@ -74,7 +74,7 @@ namespace FluentCache.Test
             In this example, we will use the Dictionarycache, which is a simple wrapper around a ConcurrentDictionary 
             
             */
-            Cache myCache = new FluentCache.Simple.FluentDictionaryCache();
+            ICache myCache = new FluentCache.Simple.FluentDictionaryCache();
             
             //Now that we have our cache, we're going to create a wrapper around our Repository
             //The wrapper will allow us to cache the results of various Repository methods

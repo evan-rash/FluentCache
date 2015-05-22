@@ -11,7 +11,7 @@ namespace FluentCache.Strategies
     /// </summary>
     public class SingleValueCacheStrategy : CacheStrategy
     {
-        internal SingleValueCacheStrategy(Cache cache, string baseKey)
+        internal SingleValueCacheStrategy(ICache cache, string baseKey)
             : base(cache, baseKey)
         {
         }

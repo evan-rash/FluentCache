@@ -24,7 +24,7 @@ namespace FluentCache
         /// <param name="key">the key of the cached item</param>
         /// <param name="region">the region for the cache</param>
         /// <returns>The cached value, or default(T) if the item is not in the cache</returns>
-        public static T GetValue<T>(this Cache source, string key, string region)
+        public static T GetValue<T>(this ICache source, string key, string region)
         {
             CachedValue<T> cache = source.Get<T>(key, region);
             return cache == null ? default(T) : cache.Value;
@@ -33,7 +33,7 @@ namespace FluentCache
         /// <summary>
         /// Returns a caching strategy for the calling method. The method name will be used in the cache key
         /// </summary>
-        public static CacheStrategyIncomplete ThisMethod(this Cache source, [CallerMemberName]string method = null)
+        public static CacheStrategyIncomplete ThisMethod(this ICache source, [CallerMemberName]string method = null)
         {
             return new CacheStrategyIncomplete(source, method);
         }
@@ -55,7 +55,7 @@ namespace FluentCache
         /// Returns a cache wrapper that can support caching strategies for member expressions
         /// ex: cache.WithSource(this).Method(t => t.MyMethod())
         /// </summary>
-        public static Cache<T> WithSource<T>(this Cache source, T caller)
+        public static Cache<T> WithSource<T>(this ICache source, T caller)
         {
             return new Cache<T>(caller, source);
         }
@@ -63,7 +63,7 @@ namespace FluentCache
         /// <summary>
         /// Returns a caching strategy with the specified key
         /// </summary>
-        public static CacheStrategyIncomplete WithKey(this Cache source, string key)
+        public static CacheStrategyIncomplete WithKey(this ICache source, string key)
         {
             return new CacheStrategyIncomplete(source, key);
         }

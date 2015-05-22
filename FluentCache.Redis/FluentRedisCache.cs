@@ -11,7 +11,7 @@ namespace FluentCache.Redis
     /// <summary>
     /// A FluentCache implementation that uses Redis to store and retrieve cache values
     /// </summary>
-    public class FluentRedisCache : Cache
+    public class FluentRedisCache : ICache
     {
         /// <summary>
         /// Constructs a new cache instance for the desired redis connection
@@ -198,7 +198,7 @@ namespace FluentCache.Redis
         /// <summary>
         /// Gets the value in the cache
         /// </summary>
-        public override CachedValue<T> Get<T>(string key, string region)
+        public CachedValue<T> Get<T>(string key, string region)
         {
             Storage storage = GetRedis(key, region);
             return storage == null ? null : storage.ToCachedValue<T>(this);
@@ -207,7 +207,7 @@ namespace FluentCache.Redis
         /// <summary>
         /// Sets the value in the cache
         /// </summary>
-        public override CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration)
+        public CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration)
         {
             Storage storage = SetRedis(key, region, value, cacheExpiration);
             return storage.ToCachedValue<T>(this);
@@ -216,7 +216,7 @@ namespace FluentCache.Redis
         /// <summary>
         /// Marks the specified cached item as validated
         /// </summary>
-        protected override void MarkAsValidated(string key, string region)
+        public void MarkAsValidated(string key, string region)
         {
             MarkValidatedRedis(key, region, DateTime.UtcNow);
         }
@@ -224,7 +224,7 @@ namespace FluentCache.Redis
         /// <summary>
         /// Removes the specified cached item from the cache
         /// </summary>
-        public override void Remove(string key, string region)
+        public void Remove(string key, string region)
         {
             RemoveRedis(key, region);
         }
@@ -232,7 +232,7 @@ namespace FluentCache.Redis
         /// <summary>
         /// Creates an execution plan for retrieving the cached value
         /// </summary>
-        public override Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
+        public virtual Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
         {
             return new FluentCache.Execution.CircuitBreakerCacheExecutionPlan<T>(this, ExceptionHandler, cacheStrategy);
         }
@@ -240,6 +240,14 @@ namespace FluentCache.Redis
         private static bool IsRedisException(FluentCacheException ex)
         {
             return ex.InnerException is StackExchange.Redis.RedisException;
+        }
+
+        /// <summary>
+        /// Gets a string representation of a parameter value to help in generating a unique key
+        /// </summary>
+        public virtual string GetParameterCacheKeyValue(object parameterValue)
+        {
+            return parameterValue == null ? String.Empty : parameterValue.ToString();
         }
     }
 }

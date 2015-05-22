@@ -10,17 +10,17 @@ namespace FluentCache
     /// A cache for a particular source whose methods you want to cache. Various Fluent extension methods simplify the process
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
-    public sealed class Cache<TSource> : Cache
+    public sealed class Cache<TSource> : ICache
     {
         /// <summary>
         /// Constructs a new instance
         /// </summary>
-        public Cache(TSource source, Cache cache)
+        public Cache(TSource source, ICache cache)
         {
             _source = source;
             _cache = cache;
         }
-        private readonly Cache _cache;
+        private readonly ICache _cache;
         private readonly TSource _source;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace FluentCache
         /// <param name="key">The key of the value to retrieve</param>
         /// <param name="region">The region in the cache where the key is stored</param>
         /// <returns>The cached value</returns>
-        public override CachedValue<T> Get<T>(string key, string region)
+        public CachedValue<T> Get<T>(string key, string region)
         {
             return _cache.Get<T>(key, region);
         }
@@ -49,7 +49,7 @@ namespace FluentCache
         /// <param name="value">The cached value</param>
         /// <param name="cacheExpiration">The expiration policy for this value</param>
         /// <returns>The cached value</returns>
-        public override CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration)
+        public CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration)
         {
             return _cache.Set(key, region, value, cacheExpiration);
         }
@@ -57,23 +57,15 @@ namespace FluentCache
         /// <summary>
         /// Removes a value from the cache
         /// </summary>
-        public override void Remove(string key, string region)
+        public void Remove(string key, string region)
         {
             _cache.Remove(key, region);
         }
 
         /// <summary>
-        /// Combines the key and region to generate a unique cache key
-        /// </summary>
-        protected internal override string GetCacheKey(string key, string region)
-        {
-            return _cache.GetCacheKey(key, region);
-        }
-
-        /// <summary>
         /// Gets a string representation of a parameter value that is used to build up a unique cache key for a parametized caching expression. The default implementation is parameterValue.ToString()
         /// </summary>
-        protected internal override string GetParameterCacheKeyValue(object parameterValue)
+        public string GetParameterCacheKeyValue(object parameterValue)
         {
             return _cache.GetParameterCacheKeyValue(parameterValue);
         }
@@ -81,7 +73,7 @@ namespace FluentCache
         /// <summary>
         /// Marks a value in the cache as validated
         /// </summary>
-        protected internal override void MarkAsValidated(string key, string region)
+        public void MarkAsValidated(string key, string region)
         {
             _cache.MarkAsValidated(key, region);
         }
@@ -89,9 +81,10 @@ namespace FluentCache
         /// <summary>
         /// Creates an execution plan for retrieving the cached value
         /// </summary>
-        public override Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
+        public Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
         {
             return _cache.CreateExecutionPlan<T>(cacheStrategy);
         }
+
     }
 }

@@ -74,7 +74,7 @@
     <Compile Include="Strategies\CacheStrategy.cs" />
     <Compile Include="CacheValidationResult.cs" />
     <Compile Include="Cache_Generic.cs" />
-    <Compile Include="Cache.cs" />
+    <Compile Include="ICache.cs" />
     <Compile Include="Strategies\MethodCacheStrategy.cs" />
     <Compile Include="Expressions\ExpressionAnalyzer.cs" />
     <Compile Include="Parameter.cs" />

@@ -10,7 +10,7 @@ namespace FluentCache
     /// <summary>
     /// Represents a cache that can be used to store and retrieve values
     /// </summary>
-    public abstract class Cache
+    public interface ICache
     {
         /// <summary>
         /// Gets a value from the cache
@@ -19,7 +19,7 @@ namespace FluentCache
         /// <param name="key">The key of the value to retrieve</param>
         /// <param name="region">The region in the cache where the key is stored</param>
         /// <returns>The cached value</returns>
-        public abstract CachedValue<T> Get<T>(string key, string region);
+        CachedValue<T> Get<T>(string key, string region);
 
         /// <summary>
         /// Sets a value in the cache
@@ -30,44 +30,27 @@ namespace FluentCache
         /// <param name="value">The cached value</param>
         /// <param name="cacheExpiration">The expiration policy for this value</param>
         /// <returns>The cached value</returns>
-        public abstract CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration);
+        CachedValue<T> Set<T>(string key, string region, T value, CacheExpiration cacheExpiration);
 
         /// <summary>
         /// Removes a value from the cache
         /// </summary>
-        public abstract void Remove(string key, string region);
+        void Remove(string key, string region);
 
         /// <summary>
         /// Marks a value in the cache as validated
         /// </summary>
-        protected internal abstract void MarkAsValidated(string key, string region);
+        void MarkAsValidated(string key, string region);
 
         /// <summary>
-        /// Gets a string representation of a parameter value that is used to build up a unique cache key for a parametized caching expression. The default implementation is parameterValue.ToString()
+        /// Gets a string representation of a parameter value that is used to build up a unique cache key for a parametized caching expression
         /// </summary>
-        protected internal virtual string GetParameterCacheKeyValue(object parameterValue)
-        {
-            if (parameterValue == null)
-                return String.Empty;
-            else
-                return parameterValue.ToString();
-        }
-
-        /// <summary>
-        /// Combines the key and region to generate a unique cache key
-        /// </summary>
-        protected internal virtual string GetCacheKey(string key, string region)
-        {
-            return region + "." + key;
-        }
+        string GetParameterCacheKeyValue(object parameterValue);
 
         /// <summary>
         /// Creates an execution plan for the specified caching strategy
         /// </summary>
-        public virtual Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
-        {
-            return new Execution.CacheExecutionPlan<T>(this, Execution.CacheExceptionHandler.Default, cacheStrategy);
-        }
+        Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy);
     }
 
 

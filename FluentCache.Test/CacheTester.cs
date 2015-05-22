@@ -38,12 +38,12 @@ namespace FluentCache.Test
 
         }
 
-        public CacheTester(Func<Cache> cacheFactory)
+        public CacheTester(Func<ICache> cacheFactory)
         {
             CacheFactory = cacheFactory;
         }
 
-        private readonly Func<Cache> CacheFactory;
+        private readonly Func<ICache> CacheFactory;
 
         private Cache<Example> GetCache()
         {

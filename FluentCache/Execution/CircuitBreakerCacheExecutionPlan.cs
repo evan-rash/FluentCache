@@ -15,7 +15,7 @@ namespace FluentCache.Execution
         /// <summary>
         /// Constructs a new instance of the execution plan
         /// </summary>
-        public CircuitBreakerCacheExecutionPlan(Cache cache, ICacheExceptionHandler exceptionHandler, ICacheStrategy<T> cacheStrategy, CircuitBreaker.ICircuitBreakerState circuitBreaker)
+        public CircuitBreakerCacheExecutionPlan(ICache cache, ICacheExceptionHandler exceptionHandler, ICacheStrategy<T> cacheStrategy, CircuitBreaker.ICircuitBreakerState circuitBreaker)
             : base(cache, exceptionHandler, cacheStrategy)
         {
             _circuitBreaker = circuitBreaker;
@@ -24,7 +24,7 @@ namespace FluentCache.Execution
         /// <summary>
         /// Constructs a new instance of the execution plan using the default circuit breaker
         /// </summary>
-        public CircuitBreakerCacheExecutionPlan(Cache cache, ICacheExceptionHandler exceptionHandler, ICacheStrategy<T> cacheStrategy)
+        public CircuitBreakerCacheExecutionPlan(ICache cache, ICacheExceptionHandler exceptionHandler, ICacheStrategy<T> cacheStrategy)
             : this(cache, exceptionHandler, cacheStrategy, GetDefaultCircuitBreaker())
         {
         }

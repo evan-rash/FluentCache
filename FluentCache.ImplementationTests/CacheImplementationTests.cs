@@ -327,7 +327,7 @@ namespace FluentCache.Test
 	//Test Helpers & Initializers
 	public partial class MemoryCacheTests 
 	{
-		private static Cache CreateCache()
+		private static ICache CreateCache()
 		{
 			var memoryCache = new System.Runtime.Caching.MemoryCache(Guid.NewGuid().ToString());
 			return new FluentCache.RuntimeCaching.FluentMemoryCache(memoryCache);
@@ -336,7 +336,7 @@ namespace FluentCache.Test
 
 	public partial class DictionaryCacheTests
 	{
-		private static Cache CreateCache()
+		private static ICache CreateCache()
 		{
 			return new FluentCache.Simple.FluentDictionaryCache();
 		}
@@ -363,7 +363,7 @@ namespace FluentCache.Test
             Redis.GetServer(endpoint).FlushAllDatabases();
         }
 
-		private static Cache CreateCache()
+		private static ICache CreateCache()
 		{
 			return new FluentCache.Redis.FluentRedisCache(Redis);
 		}
