@@ -204,3 +204,7 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+
+#ignore local nuget files
+FluentCache-nuget/lib
+FluentCache.Redis-nuget/lib
