@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>FluentCache.Redis</id>
-    <version>0.3.0.0</version>
+    <version>0.3.0.2</version>
     <title>FluentCache implementation for Redis</title>
     <authors>Evan Rash</authors>
     <owners>Evan Rash</owners>
@@ -16,7 +16,7 @@
     <tags>Cache Fluent Redis</tags>
     <dependencies>
       <group>
-        <dependency id="FluentCache" version="3.0.0" />
+        <dependency id="FluentCache" version="3.0.0.1" />
         <dependency id="Newtonsoft.Json" version="6.0.4" />
         <dependency id="StackExchange.Redis" version="1.0.328" />
       </group>
