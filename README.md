@@ -2,7 +2,14 @@
 
 FluentCache is a simple, fluent library to help you write clean, legible caching code by reducing boilerplate.
 
-Here's an example of some typical caching code:
+```csharp
+double ezResult = cache.Method(r => r.DoSomeHardParameterizedWork(parameter))
+                       .GetValue();
+```
+
+FluentCache automatically analyzes the expression tree and generates a unique cache key from the type, method, and any parameters and creates a caching policy that you can store or immediately execute. You can also specify various caching policies such as time-to-live, error handling, and cache invalidation.
+
+Here's an example of some typical caching code that can be replaced by FluentCache:
 
 ```csharp
 //I want to retrieve a value from my cache, and if it's not there load it from the repository 
@@ -21,15 +28,6 @@ double result = cachedValue.Value;
 ```
 
 This code is full of boilerplate, magic strings, and is hard to read. The *intent* of the code is overwhelmed by the mechanics of how to cache the value. I hope the method names and parameters don't change, otherwise I have to remember to update the cache key!
-
-Here's the equivalent code using FluentCache
-
-```csharp
-double ezResult = cache.Method(r => r.DoSomeHardParameterizedWork(parameter))
-                       .GetValue();
-```
-
-FluentCache automatically analyzes the expression tree and generates a unique cache key from the type, method, and any parameters and creates a caching policy that you can store or immediately execute. You can also specify various caching policies such as time-to-live, error handling, and cache invalidation.
 
 # Examples:
 
@@ -55,9 +53,13 @@ cache.Method(r => r.DoSomeHardParameterizedWork(parameter))
 
 # Getting Started
 
-To get started, you need to choose a FluentCache implementation. FluentCache supports System.Runtime.Caching.MemoryCache out of the box. Other cache types can implement the FluentCache.ICache interface.
+To get started, you need to choose a FluentCache implementation. FluentCache supports the following cache implementations out of the box:
+* ```FluentDictionaryCache``` which is a wrapper around Dictionary<string,object>
+* ```FluentMemoryCache``` which is a wrapper around ```System.Runtime.Caching.MemoryCache```
 
-In this example, we will use the FluentMemoryCache, which is a wrapper around the System.Runtime.Caching.MemoryCache  
+Other cache implementations can implement the FluentCache.Cache base class
+
+In this example, we will use the FluentMemoryCache to illustrate the various Fluent extension methods provided by the API
 
 ```csharp
 Cache myCache = FluentCache.RuntimeCaching.FluentMemoryCache.Default();
@@ -67,7 +69,7 @@ Cache myCache = FluentCache.RuntimeCaching.FluentMemoryCache.Default();
 Repository repo = new Repository();
 Cache<Repository> myRepositoryCache = myCache.WithSource(repo);
 
-//Now that we have a wrapper, we can create and execute a CacheStrategy
+//Now that we have a wrapper, we can create and execute a CacheStrategy using many convenient Fluent Extension methods
 string resource = myRepositoryCache.Method(r => r.RetrieveResource())
                                    .ExpireAfter(TimeSpan.FromMinutes(30))
                                    .GetValue();
