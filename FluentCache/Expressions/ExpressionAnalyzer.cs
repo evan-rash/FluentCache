@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using FluentCache.Strategies;
 
 namespace FluentCache.Expressions
 {
@@ -32,7 +33,7 @@ namespace FluentCache.Expressions
             throw UnableToProcessMemberSource(memberExpression);
         }
 
-        private List<object> GetMethodParameters<T>(ICache<T> cache, MethodCallExpression methodCallExpression)
+        private List<object> GetMethodParameters<T>(Cache<T> cache, MethodCallExpression methodCallExpression)
         {
             //Get the parameters
             List<object> parameters = new List<object>();
@@ -48,7 +49,7 @@ namespace FluentCache.Expressions
             return parameters;
         }
 
-        public CacheStrategyIncomplete CreateCacheStrategyFromMethod<T>(ICache<T> cache, MethodCallExpression methodCallExpression)
+        public CacheStrategyIncomplete CreateCacheStrategyFromMethod<T>(Cache<T> cache, MethodCallExpression methodCallExpression)
         {
             if (methodCallExpression == null)
                 throw new ArgumentNullException("methodCallExpression");
@@ -67,7 +68,7 @@ namespace FluentCache.Expressions
                         .WithParameters(parameters.ToArray());
         }
 
-        public CacheStrategyIncomplete CreateCacheStrategyFromMember<T>(ICache<T> cache, MemberExpression memberExpression)
+        public CacheStrategyIncomplete CreateCacheStrategyFromMember<T>(Cache<T> cache, MemberExpression memberExpression)
         {
             if (memberExpression == null)
                 throw new ArgumentNullException("memberExpression");
@@ -82,7 +83,7 @@ namespace FluentCache.Expressions
                         .WithRegion(region);
         }
 
-        public MethodCacheStrategy<TResult> CreateCacheStrategy<T, TResult>(ICache<T> cache, Expression<Func<T, TResult>> method)
+        public MethodCacheStrategy<TResult> CreateCacheStrategy<T, TResult>(Cache<T> cache, Expression<Func<T, TResult>> method)
         {
             Func<T, TResult> compiledMethod = method.Compile();
             Func<TResult> retrieve = () =>
@@ -109,7 +110,7 @@ namespace FluentCache.Expressions
             return methodStrat;
         }
 
-        public AsyncMethodCacheStrategy<TResult> CreateAsyncCacheStrategy<T, TResult>(ICache<T> cache, Expression<Func<T, Task<TResult>>> method)
+        public AsyncMethodCacheStrategy<TResult> CreateAsyncCacheStrategy<T, TResult>(Cache<T> cache, Expression<Func<T, Task<TResult>>> method)
         {
             Func<T, Task<TResult>> compiledRetrieve = method.Compile();
             Func<Task<TResult>> retrieve = () => compiledRetrieve(cache.Source);
@@ -186,7 +187,7 @@ namespace FluentCache.Expressions
             }
         }
 
-        private BulkCacheStrategyIncomplete<TKey, TResult> CreateBulkCacheStrategyFromMethod<T, TKey, TResult>(ICache<T> cache, MethodCallExpression methodCallExpression)
+        private BulkCacheStrategyIncomplete<TKey, TResult> CreateBulkCacheStrategyFromMethod<T, TKey, TResult>(Cache<T> cache, MethodCallExpression methodCallExpression)
         {
             //Get the region from the calling type
             string region = methodCallExpression.Method.DeclaringType.Name;
@@ -221,7 +222,7 @@ namespace FluentCache.Expressions
                             .WithParameters(otherParameters.ToArray());
         }
 
-        public BulkMethodCacheStrategy<TKey, TResult> CreateBulkCacheStrategy<T, TKey, TResult>(ICache<T> cache, Expression<Func<T, ICollection<KeyValuePair<TKey, TResult>>>> method)
+        public BulkMethodCacheStrategy<TKey, TResult> CreateBulkCacheStrategy<T, TKey, TResult>(Cache<T> cache, Expression<Func<T, ICollection<KeyValuePair<TKey, TResult>>>> method)
         {
             var methodCallExpression = method.Body as MethodCallExpression;
             if (methodCallExpression == null)
@@ -232,7 +233,7 @@ namespace FluentCache.Expressions
             //Take the given expression (t => t.MyMethod(args)) and translate it into (t, keys) => t.MyMethod(keys)
             Expression<Func<T, ICollection<TKey>, ICollection<KeyValuePair<TKey, TResult>>>> expandedExpression = ArgumentReplacer.ReplaceFirstArgumentInLambdaWithParameter<T, ICollection<TKey>, ICollection<KeyValuePair<TKey, TResult>>>(method, "keys");
             Func<T, ICollection<TKey>, ICollection<KeyValuePair<TKey, TResult>>> expandedFunction = expandedExpression.Compile();
-            
+
             //Curry the expandedFunction down to a function we can use to retrieve the value via cache.Source
             Func<ICollection<TKey>, ICollection<KeyValuePair<TKey, TResult>>> retrieve = keys => expandedFunction(cache.Source, keys);
 
@@ -242,7 +243,7 @@ namespace FluentCache.Expressions
             return strat;
         }
 
-        public AsyncBulkMethodCacheStrategy<TKey, TResult> CreateAsyncBulkCacheStrategy<T, TKey, TResult>(ICache<T> cache, Expression<Func<T, Task<ICollection<KeyValuePair<TKey, TResult>>>>> method)
+        public AsyncBulkMethodCacheStrategy<TKey, TResult> CreateAsyncBulkCacheStrategy<T, TKey, TResult>(Cache<T> cache, Expression<Func<T, Task<ICollection<KeyValuePair<TKey, TResult>>>>> method)
         {
             var methodCallExpression = method.Body as MethodCallExpression;
             if (methodCallExpression == null)

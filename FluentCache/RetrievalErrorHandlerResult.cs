@@ -25,7 +25,7 @@ namespace FluentCache
         /// <summary>
         /// A simple retrieval error handler that uses the previous cached value, if it exists
         /// </summary>
-        public static RetrievalErrorHandlerResult<T> UsePreviousCachedValue(Exception retrievalException, ICachedValue<T> previousValue)
+        public static RetrievalErrorHandlerResult<T> UsePreviousCachedValue(Exception retrievalException, CachedValue<T> previousValue)
         {
             if (previousValue != null)
                 return new RetrievalErrorHandlerResult<T> { FallbackResult = previousValue.Value, IsErrorHandled = true };
@@ -36,7 +36,7 @@ namespace FluentCache
         /// <summary>
         /// A simple retrieval error handler that uses the previous cached value if it exists, otherwise uses a default value
         /// </summary>
-        public static RetrievalErrorHandlerResult<T> UsePreviousCachedValueOrDefault(Exception retrievalException, ICachedValue<T> previousValue, T defaultValue)
+        public static RetrievalErrorHandlerResult<T> UsePreviousCachedValueOrDefault(Exception retrievalException, CachedValue<T> previousValue, T defaultValue)
         {
             return new RetrievalErrorHandlerResult<T> { IsErrorHandled = true, FallbackResult = previousValue == null? defaultValue : previousValue.Value };
         } 

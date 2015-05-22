@@ -39,25 +39,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netcore45", "netcore45", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "portable-net45+netcore45", "portable-net45+netcore45", "{92D3C1C7-271D-4AE9-86EC-5E84D3F607BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentCache.ImplementationTests", "FluentCache.ImplementationTests\FluentCache.ImplementationTests.csproj", "{8F9ED4D1-5709-4CB2-BEAF-1F577AD6B949}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentCache.Redis.Test", "FluentCache.Redis.Test\FluentCache.Redis.Test.csproj", "{C4955F2B-2059-4F82-9B59-69EAF05CF4BC}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://pickles.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = FluentCache\\FluentCache.csproj
-		SccProjectName1 = FluentCache
-		SccLocalPath1 = FluentCache
-		SccProjectUniqueName2 = FluentCache.Test\\FluentCache.Test.csproj
-		SccProjectName2 = FluentCache.Test
-		SccLocalPath2 = FluentCache.Test
-		SccProjectUniqueName3 = FluentCache.RuntimeCaching\\FluentCache.RuntimeCaching.csproj
-		SccProjectName3 = FluentCache.RuntimeCaching
-		SccLocalPath3 = FluentCache.RuntimeCaching
-		SccProjectUniqueName4 = FluentCache.Redis\\FluentCache.Redis.csproj
-		SccProjectName4 = FluentCache.Redis
-		SccLocalPath4 = FluentCache.Redis
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -79,6 +65,14 @@ Global
 		{C2A9BDCA-6DFC-4F40-BDBD-2FA6FAC61A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2A9BDCA-6DFC-4F40-BDBD-2FA6FAC61A0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2A9BDCA-6DFC-4F40-BDBD-2FA6FAC61A0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F9ED4D1-5709-4CB2-BEAF-1F577AD6B949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F9ED4D1-5709-4CB2-BEAF-1F577AD6B949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F9ED4D1-5709-4CB2-BEAF-1F577AD6B949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F9ED4D1-5709-4CB2-BEAF-1F577AD6B949}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4955F2B-2059-4F82-9B59-69EAF05CF4BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4955F2B-2059-4F82-9B59-69EAF05CF4BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4955F2B-2059-4F82-9B59-69EAF05CF4BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4955F2B-2059-4F82-9B59-69EAF05CF4BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FluentCache.Strategies;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace FluentCache.Test
     [TestClass]
     public class ErrorHandlerTests
     {
-        private ICache<CircuitBreakerOperations> CreateCache()
+        private Cache<CircuitBreakerOperations> CreateCache()
         {
-            return new SimpleCache().WithSource(new CircuitBreakerOperations());
+            return new FluentCache.Simple.FluentDictionaryCache().WithSource(new CircuitBreakerOperations());
         }
 
         [TestMethod, ExpectedException(typeof(InvalidOperationException))]
@@ -49,10 +50,15 @@ namespace FluentCache.Test
         [TestMethod]
         public async Task ErrorHandling_Async_UsePreviousValue()
         {
+            bool isInvalid = false;
+            Func<CachedValue<double>, CacheValidationResult> validate = val => isInvalid ? CacheValidationResult.Invalid : CacheValidationResult.Unknown;
+
             CacheStrategyAsync<int> cacheStrategy = CreateCache().Method(c => c.RandomValueThatThrowsExceptionOnSecondTryAsync())
                                                                  .IfRetrievalFailsUsePreviousValue();
 
             int previousValue = await cacheStrategy.GetValueAsync();
+
+            isInvalid = true;   //force a second retrieval by invalidating the previous value
 
             int newValue = await cacheStrategy.GetValueAsync();
 

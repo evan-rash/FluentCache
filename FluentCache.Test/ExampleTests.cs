@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace FluentCache.Test
 {
-    [TestMethod]
+    [TestClass]
     public class ExampleTests
     {
-        private ICache<Repository> CreateCache()
+        private Cache<Repository> CreateCache()
         {
-            return new SimpleCache().WithSource(new Repository());
+            return new FluentCache.Simple.FluentDictionaryCache().WithSource(new Repository());
         }
 
         [TestMethod]
         public async Task BasicExample()
         {
-            ICache<Repository> cache = CreateCache();
+            Cache<Repository> cache = CreateCache();
 
             //Here's an example of some typical caching code
             //I want to retrieve a value from my cache, and if it's not there load it from the repository 
@@ -27,11 +27,11 @@ namespace FluentCache.Test
             string region = "FluentCacheExamples";
             string cacheKey = "Samples.DoSomeHardParameterizedWork." + parameter;
 
-            ICachedValue<double> cachedValue = cache.Get<double>(cacheKey, region);
+            CachedValue<double> cachedValue = cache.Get<double>(cacheKey, region);
             if (cachedValue == null)
             {
                 double val = repository.DoSomeHardParameterizedWork(parameter);
-                cachedValue = cache.Set<double>(cacheKey, region, val, new CachePolicy());
+                cachedValue = cache.Set<double>(cacheKey, region, val, new CacheExpiration());
             }
             double result = cachedValue.Value;
 
@@ -71,15 +71,15 @@ namespace FluentCache.Test
             FluentCache supports System.Runtime.Caching.MemoryCache out of the box
             Other cache types can implement the FluentCache.ICache interface
             
-            In this example, we will use the FluentMemoryCache, which is a wrapper around the System.Runtime.Caching.MemoryCache  
+            In this example, we will use the Dictionarycache, which is a simple wrapper around a ConcurrentDictionary 
             
             */
-            ICache myCache = FluentCache.RuntimeCaching.FluentMemoryCache.Default();
+            Cache myCache = new FluentCache.Simple.FluentDictionaryCache();
             
             //Now that we have our cache, we're going to create a wrapper around our Repository
             //The wrapper will allow us to cache the results of various Repository methods
             Repository repo = new Repository();
-            ICache<Repository> myRepositoryCache = myCache.WithSource(repo);
+            Cache<Repository> myRepositoryCache = myCache.WithSource(repo);
 
             //Now that we have a wrapper, we can create and execute a CacheStrategy
             string resource = myRepositoryCache.Method(r => r.RetrieveResource())

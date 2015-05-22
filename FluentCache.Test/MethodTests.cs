@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FluentCache.Strategies;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,9 @@ namespace FluentCache.Test
         public readonly static string TestStaticField = TestConstant;
         public static string TestStaticProperty { get { return TestStaticField; } }
 
-        private ICache<MethodTests> CreateCache()
+        private Cache<MethodTests> CreateCache()
         {
-            return new SimpleCache().WithSource(this);
+            return new FluentCache.Simple.FluentDictionaryCache().WithSource(this);
         }
 
         private double CalculateSomeWork()
@@ -203,11 +204,8 @@ namespace FluentCache.Test
 
             Func<string> testLambda = () => TestConstant;
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(testLambda());
-
             //We expect this to fail because the parser doesn't know how to evaluate a lamda
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(testLambda()));
+            cache.Method(t => t.DownloadTextAsync(testLambda()));
         }
 
         [TestMethod, ExpectedException(typeof(Expressions.InvalidCachingExpressionException))]
@@ -215,11 +213,8 @@ namespace FluentCache.Test
         {
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(TestMethod());
-
             //We expect this to fail because the parser doesn't know how to evaluate a method
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(t.TestMethod()));
+            cache.Method(t => t.DownloadTextAsync(t.TestMethod()));
         }
 
         [TestMethod]

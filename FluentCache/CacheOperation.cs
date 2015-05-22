@@ -22,6 +22,10 @@ namespace FluentCache
         /// <summary>
         /// Removing a value from the cache
         /// </summary>
-        Remove = 2
+        Remove = 2,
+        /// <summary>
+        /// Marking a value in the cache as validated
+        /// </summary>
+        MarkValidated = 3,
     }
 }

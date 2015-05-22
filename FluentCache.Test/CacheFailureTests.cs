@@ -31,7 +31,7 @@ namespace FluentCache.Test
             }
         }
 
-        private ICache<CacheMe> CreateHandledCache(params CacheOperation[] failingOperations)
+        private Cache<CacheMe> CreateHandledCache(params CacheOperation[] failingOperations)
         {
             return new SimpleFailingCache(true, failingOperations).WithSource(new CacheMe());
         }

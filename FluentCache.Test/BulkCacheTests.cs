@@ -10,9 +10,9 @@ namespace FluentCache.Test
     [TestClass]
     public class BulkCacheTests
     {
-        private ICache<BulkCacheOperations> CreateCache()
+        private Cache<BulkCacheOperations> CreateCache()
         {
-            return new SimpleCache().WithSource(new BulkCacheOperations());
+            return new Simple.FluentDictionaryCache().WithSource(new BulkCacheOperations());
         }
 
         [TestMethod]
@@ -32,10 +32,10 @@ namespace FluentCache.Test
             DateTime now = DateTime.UtcNow;
 
 
-            IList<ICachedValue<double>> results = cache.Method(t => t.GetExponents(nums2))
+            IList<CachedValue<double>> results = cache.Method(t => t.GetExponents(nums2))
                                                        .GetAll();
 
-            foreach (ICachedValue<double> cachedItem in results)
+            foreach (CachedValue<double> cachedItem in results)
             {
                 Assert.IsTrue(cachedItem.CachedDate < now, "All items should have been previously cached");
             }
@@ -58,10 +58,10 @@ namespace FluentCache.Test
             DateTime now = DateTime.UtcNow;
 
 
-            IList<ICachedValue<double>> results = await cache.Method(t => t.GetExponentsAsync(nums2))
+            IList<CachedValue<double>> results = await cache.Method(t => t.GetExponentsAsync(nums2))
                                                              .GetAllAsync();
 
-            foreach (ICachedValue<double> cachedItem in results)
+            foreach (CachedValue<double> cachedItem in results)
             {
                 Assert.IsTrue(cachedItem.CachedDate < now, "All items should have been previously cached");
             }
@@ -91,9 +91,9 @@ namespace FluentCache.Test
             await Task.Delay(TimeSpan.FromSeconds(.5));
 
             var secondStrat = cache.Method(t => t.GetExponentsWithParameter(nums, 11));
-            IList<ICachedValue<double>> results = secondStrat.GetAll();
+            IList<CachedValue<double>> results = secondStrat.GetAll();
 
-            foreach (ICachedValue<double> cachedItem in results)
+            foreach (CachedValue<double> cachedItem in results)
             {
                 Assert.IsTrue(cachedItem.CachedDate > notCachedBefore, "No items should have been cached. Item with value {0} was cached on {1} and should not have been cached before {2}", cachedItem.Value, cachedItem.CachedDate, notCachedBefore);
             }
@@ -113,10 +113,10 @@ namespace FluentCache.Test
             DateTime notCachedBefore = DateTime.UtcNow;
             await Task.Delay(TimeSpan.FromSeconds(.5));
 
-            IList<ICachedValue<double>> results = cache.Method(t => t.GetExponentsWithParameter(nums, 11))
+            IList<CachedValue<double>> results = cache.Method(t => t.GetExponentsWithParameter(nums, 11))
                                                        .GetAll();
 
-            foreach (ICachedValue<double> cachedItem in results)
+            foreach (CachedValue<double> cachedItem in results)
             {
                 Assert.IsTrue(cachedItem.CachedDate > notCachedBefore, "No items should have been cached. Item with value {0} was cached on {1} and should not have been cached before {2}", cachedItem.Value, cachedItem.CachedDate, notCachedBefore);
             }
@@ -139,9 +139,9 @@ namespace FluentCache.Test
 
             strat.ClearValues();
 
-            IList<ICachedValue<double>> results = strat.GetAll();
+            IList<CachedValue<double>> results = strat.GetAll();
 
-            foreach (ICachedValue<double> cachedItem in results)
+            foreach (CachedValue<double> cachedItem in results)
                 Assert.IsTrue(cachedItem.CachedDate > notCachedBefore, "No items should have been cached. Item with value {0} was cached on {1} and should not have been cached before {2}", cachedItem.Value, cachedItem.CachedDate, notCachedBefore);
         }
 
