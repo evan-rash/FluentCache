@@ -247,7 +247,7 @@ namespace FluentCache.Redis
         /// </summary>
         public virtual string GetParameterCacheKeyValue(object parameterValue)
         {
-            return parameterValue == null ? String.Empty : parameterValue.ToString();
+            return ParameterCacheKeys.GenerateCacheKey(parameterValue);
         }
     }
 }

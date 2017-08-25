@@ -49,7 +49,12 @@ namespace FluentCache.Test
             {
                 return await client.GetStringAsync(url);
             }
-        } 
+        }
+        
+        private int GetItemCount<T>(IEnumerable<T> item)
+        {
+            return item == null? 0 : item.Count();
+        }
 
 
 
@@ -195,6 +200,36 @@ namespace FluentCache.Test
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
 
+        }
+
+        [TestMethod]
+        public void CacheMethod_Method_EnumerableParameter()
+        {
+            var cache = CreateCache();
+
+            var arg1 = new List<string> { "a", "b", "c" };
+            var arg2 = new List<string> { "d", "e", "f", "g" };
+            var arg3 = new string[] { "a", "b", "c" };
+
+
+            var strat1 = cache.Method(r => r.GetItemCount(arg1));
+            var strat2 = cache.Method(r => r.GetItemCount(arg2));
+            var strat3 = cache.Method(r => r.GetItemCount(arg3));
+
+
+            Assert.IsTrue(strat1.Key.Contains("[a,b,c]"), "IEnumerable<string> parameter should be rendered as a list");
+            Assert.IsTrue(strat2.Key.Contains("[d,e,f,g]"), "IEnumerable<string> parameter should be rendered as a list");
+            Assert.AreEqual(strat1.Key, strat3.Key, "Both arg1 and arg3 are IEnumerable<string> and should have the same cache key");
+
+            var cache1 = strat1.Get();
+            var cache2 = strat2.Get();
+
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.5));
+            var cache3 = strat3.Get();
+
+            Assert.AreEqual(arg1.Count, cache1.Value);
+            Assert.AreEqual(arg2.Count, cache2.Value);
+            Assert.AreEqual(cache1.CachedDate, cache3.CachedDate);
         }
 
         [TestMethod, ExpectedException(typeof(Expressions.InvalidCachingExpressionException))]

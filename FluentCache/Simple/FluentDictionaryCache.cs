@@ -109,7 +109,7 @@ namespace FluentCache.Simple
         /// </summary>
         public virtual string GetParameterCacheKeyValue(object parameterValue)
         {
-            return parameterValue == null ? String.Empty : parameterValue.ToString();
+            return ParameterCacheKeys.GenerateCacheKey(parameterValue);
         }
 
         private string GetCacheKey(string key, string region)

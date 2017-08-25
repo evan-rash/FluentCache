@@ -56,6 +56,7 @@
     <Compile Include="ICacheStrategy.cs" />
     <Compile Include="Execution\CacheExecutionPlan.cs" />
     <Compile Include="CacheOperation.cs" />
+    <Compile Include="ParameterCacheKeys.cs" />
     <Compile Include="Simple\FluentDictionaryCache.cs" />
     <Compile Include="Strategies\BulkCacheStrategy.cs" />
     <Compile Include="Strategies\BulkCacheStrategyAsync.cs" />
