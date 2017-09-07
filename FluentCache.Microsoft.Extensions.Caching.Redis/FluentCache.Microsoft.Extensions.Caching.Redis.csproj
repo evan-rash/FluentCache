@@ -3,34 +3,34 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>4.0.0.1</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Evan Rash</Authors>
     <Company>Evan Rash</Company>
-    <Description>FluentCache implementations based on System.Runtime.Caching.MemoryCache</Description>
+    <Product>FluentCache</Product>
+    <Description>FluentCache implementation for Microsoft.Extensions.Caching.Redis</Description>
     <PackageLicenseUrl>https://github.com/cordialgerm/FluentCache/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/cordialgerm/FluentCache</PackageProjectUrl>
     <RepositoryUrl>https://github.com/cordialgerm/FluentCache</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageTags>Cache Fluent System.Runtime.Caching.MemoryCache</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageTags>Cache Fluent Redis FluentCache.Microsoft.Extensions.Caching.Redis</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/cordialgerm/FluentCache/master/FluentCache.png</PackageIconUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <WarningLevel>4</WarningLevel>
     <NoWarn />
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <DocumentationFile>bin\Debug\netstandard2.0\FluentCache.RuntimeCaching.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\FluentCache.Microsoft.Extensions.Caching.Redis.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FluentCache\FluentCache.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Runtime.Caching">
-      <HintPath>..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Runtime.Caching.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\FluentCache.Microsoft.Extensions.Caching.Abstractions\FluentCache.Microsoft.Extensions.Caching.Abstractions.csproj" />
+    <ProjectReference Include="..\FluentCache\FluentCache.csproj" />
   </ItemGroup>
 
 </Project>

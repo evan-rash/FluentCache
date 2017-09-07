@@ -122,7 +122,7 @@ namespace FluentCache.Simple
         /// </summary>
         public virtual Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
         {
-            return new Execution.CacheExecutionPlan<T>(this, Execution.CacheExceptionHandler.Default, cacheStrategy);
+            return new Execution.CacheExecutionPlan<T>(this, cacheStrategy);
         }
 
         private class Storage

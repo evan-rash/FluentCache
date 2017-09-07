@@ -5,13 +5,14 @@
     <Version>4.0.0.1</Version>
     <Authors>Evan Rash</Authors>
     <Company>Evan Rash</Company>
-    <Description>FluentCache implementations based on System.Runtime.Caching.MemoryCache</Description>
+    <Description>FluentCache implementations based on Microsoft.Extensions.Caching.Abstractions interfaces (IMemoryCache and IDistributedCache)</Description>
     <PackageLicenseUrl>https://github.com/cordialgerm/FluentCache/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/cordialgerm/FluentCache</PackageProjectUrl>
     <RepositoryUrl>https://github.com/cordialgerm/FluentCache</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageTags>Cache Fluent System.Runtime.Caching.MemoryCache</PackageTags>
+    <PackageTags>Cache Fluent Microsoft.Extensions.Caching IMemoryCache IDistributedCache</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>FluentCache</Product>
     <PackageIconUrl>https://raw.githubusercontent.com/cordialgerm/FluentCache/master/FluentCache.png</PackageIconUrl>
   </PropertyGroup>
 
@@ -20,17 +21,15 @@
     <NoWarn />
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <DocumentationFile>bin\Debug\netstandard2.0\FluentCache.RuntimeCaching.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\FluentCache.Microsoft.Extensions.Caching.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FluentCache\FluentCache.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Runtime.Caching">
-      <HintPath>..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Runtime.Caching.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\FluentCache\FluentCache.csproj" />
   </ItemGroup>
 
 </Project>

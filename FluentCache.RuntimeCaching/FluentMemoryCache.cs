@@ -26,10 +26,7 @@ namespace FluentCache.RuntimeCaching
         /// </summary>
         public FluentMemoryCache(MemoryCache memoryCache)
         {
-            if (memoryCache == null)
-                throw new ArgumentNullException("memoryCache");
-
-            MemoryCache = memoryCache;
+            MemoryCache = memoryCache ?? throw new ArgumentNullException("memoryCache");
         }
 
         private readonly MemoryCache MemoryCache;
@@ -77,8 +74,7 @@ namespace FluentCache.RuntimeCaching
         {
             DateTime now = DateTime.UtcNow;
             string k = GetCacheKey(key, region);
-            Storage storage = MemoryCache.Get(k) as Storage;
-            if (storage != null)
+            if (MemoryCache.Get(k) is Storage storage)
             {
                 storage.Version++;
                 storage.LastValidatedDate = now;
@@ -121,8 +117,7 @@ namespace FluentCache.RuntimeCaching
         {
             DateTime now = DateTime.UtcNow;
             string k = GetCacheKey(key, region);
-            Storage storage = MemoryCache.Get(k) as Storage;
-            if (storage != null)
+            if (MemoryCache.Get(k) is Storage storage)
                 storage.LastValidatedDate = now;
         }
 
@@ -139,7 +134,7 @@ namespace FluentCache.RuntimeCaching
         /// </summary>
         public virtual Execution.ICacheExecutionPlan<T> CreateExecutionPlan<T>(ICacheStrategy<T> cacheStrategy)
         {
-            return new Execution.CacheExecutionPlan<T>(this, Execution.CacheExceptionHandler.Default, cacheStrategy);
+            return new Execution.CacheExecutionPlan<T>(this, cacheStrategy);
         }
 
         private string GetCacheKey(string key, string region)

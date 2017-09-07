@@ -15,23 +15,16 @@ namespace FluentCache.Execution
         /// <summary>
         /// Constructs a new instance of the execution plan
         /// </summary>
-        public CacheExecutionPlan(ICache cache, ICacheExceptionHandler exceptionHandler, ICacheStrategy<T> cacheStrategy)
+        public CacheExecutionPlan(ICache cache, ICacheStrategy<T> cacheStrategy)
         {
             _cache = cache;
-            _exceptionHandler = exceptionHandler;
             _cacheStrategy = cacheStrategy;
             _cacheStrategyAsync = cacheStrategy as ICacheStrategyAsync<T>;
         }
 
         private readonly ICache _cache;
-        private readonly ICacheExceptionHandler _exceptionHandler;
         private readonly ICacheStrategy<T> _cacheStrategy;
         private readonly ICacheStrategyAsync<T> _cacheStrategyAsync;
-
-        /// <summary>
-        /// Gets the exception handler
-        /// </summary>
-        protected ICacheExceptionHandler ExceptionHandler { get { return _exceptionHandler; } }
 
         /// <summary>
         /// Gets the Key that will be used in combination with the Region to retrieve the value from the cache
@@ -112,25 +105,13 @@ namespace FluentCache.Execution
         /// </summary>
         public virtual CachedValue<T> Execute()
         {
-            CachedValue<T> cachedValue = null;
-            try
-            {
-                cachedValue = Cache.Get<T>(Key, Region);
+            CachedValue<T> cachedValue = Cache.Get<T>(Key, Region);
+            CacheValidationResult validationResult = ValidateCachedValue(cachedValue);
 
-                CacheValidationResult validationResult = ValidateCachedValue(cachedValue);
+            if (validationResult != CacheValidationResult.Valid && (validationResult == CacheValidationResult.Invalid || cachedValue == null))
+                cachedValue = RetrieveCachedValue(previousCachedValue: cachedValue);
 
-                if (validationResult != CacheValidationResult.Valid && (validationResult == CacheValidationResult.Invalid || cachedValue == null))
-                    cachedValue = RetrieveCachedValue(previousCachedValue: cachedValue);
-
-                return cachedValue;
-            }
-            catch (FluentCache.FluentCacheException cacheException)
-            {
-                if (!ExceptionHandler.TryHandleCachingFailure(cacheException))
-                    throw;
-                else
-                    return null;
-            }
+            return cachedValue;
         }
 
         /// <summary>
@@ -138,25 +119,13 @@ namespace FluentCache.Execution
         /// </summary>
         public virtual async Task<CachedValue<T>> ExecuteAsync()
         {
-            CachedValue<T> cachedValue = null;
-            try
-            {
-                cachedValue = Cache.Get<T>(Key, Region);
+            CachedValue<T> cachedValue = cachedValue = Cache.Get<T>(Key, Region);
+            CacheValidationResult validationResult = await ValidateCachedValueAsync(cachedValue);
 
-                CacheValidationResult validationResult = await ValidateCachedValueAsync(cachedValue);
+            if (validationResult != CacheValidationResult.Valid && (validationResult == CacheValidationResult.Invalid || cachedValue == null))
+                cachedValue = await RetrieveCachedValueAsync(previousCachedValue: cachedValue);
 
-                if (validationResult != CacheValidationResult.Valid && (validationResult == CacheValidationResult.Invalid || cachedValue == null))
-                    cachedValue = await RetrieveCachedValueAsync(previousCachedValue: cachedValue);
-
-                return cachedValue;
-            }
-            catch (FluentCache.FluentCacheException cacheException)
-            {
-                if (!ExceptionHandler.TryHandleCachingFailure(cacheException))
-                    throw;
-                else
-                    return null;
-            }
+            return cachedValue;
         }
     }
 

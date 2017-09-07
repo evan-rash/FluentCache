@@ -1,100 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2AF5CE3F-41CD-4E68-8DC7-7C68C69D2405}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FluentCache</RootNamespace>
-    <AssemblyName>FluentCache</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <TargetFramework>netstandard1.2</TargetFramework>
+    <Version>4.0.0.1</Version>
+    <Authors>Evan Rash</Authors>
+    <Company />
+    <PackageLicenseUrl>https://github.com/cordialgerm/FluentCache/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/cordialgerm/FluentCache</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/cordialgerm/FluentCache</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>Cache Fluent</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>FluentCache is a simple, fluent library to help you write clean, legible caching code by reducing boilerplate.</Description>
+    <PackageIconUrl>https://raw.githubusercontent.com/cordialgerm/FluentCache/master/FluentCache.png</PackageIconUrl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\FluentCache.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\FluentCache.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn />
+    <DocumentationFile>bin\Debug\netstandard1.2\FluentCache.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Development|AnyCPU'">
-    <OutputPath>bin\Development\</OutputPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="CachedValue.cs" />
-    <Compile Include="CacheExpiration.cs" />
-    <Compile Include="Execution\CacheExceptionHandler.cs" />
-    <Compile Include="Execution\CircuitBreakerCacheExecutionPlan.cs" />
-    <Compile Include="CircuitBreaker\CircuitBreakerState.cs" />
-    <Compile Include="CircuitBreaker\ICircuitBreakerState.cs" />
-    <Compile Include="CircuitBreaker\TimedLock.cs" />
-    <Compile Include="Execution\ICacheExceptionHandler.cs" />
-    <Compile Include="Execution\ICacheExecutionPlan.cs" />
-    <Compile Include="ICacheStrategyAsync.cs" />
-    <Compile Include="ICacheStrategy.cs" />
-    <Compile Include="Execution\CacheExecutionPlan.cs" />
-    <Compile Include="CacheOperation.cs" />
-    <Compile Include="ParameterCacheKeys.cs" />
-    <Compile Include="Simple\FluentDictionaryCache.cs" />
-    <Compile Include="Strategies\BulkCacheStrategy.cs" />
-    <Compile Include="Strategies\BulkCacheStrategyAsync.cs" />
-    <Compile Include="Strategies\BulkCacheStrategyIncomplete.cs" />
-    <Compile Include="Strategies\BulkMethodCacheStrategy.cs" />
-    <Compile Include="Strategies\CacheStrategyAsync.cs" />
-    <Compile Include="Expressions\InvalidCachingExpressionException.cs" />
-    <Compile Include="FluentCacheException.cs" />
-    <Compile Include="Expressions\ArgumentReplacer.cs" />
-    <Compile Include="RetrievalErrorHandlerResult.cs" />
-    <Compile Include="Strategies\SingleValueCacheStrategy.cs" />
-    <Compile Include="Strategies\CacheStrategyParameterized.cs" />
-    <Compile Include="Strategies\CacheStrategy_Generic.cs" />
-    <Compile Include="Strategies\CacheStrategyIncomplete.cs" />
-    <Compile Include="CacheExtensions.cs" />
-    <Compile Include="Strategies\CacheStrategy.cs" />
-    <Compile Include="CacheValidationResult.cs" />
-    <Compile Include="Cache_Generic.cs" />
-    <Compile Include="ICache.cs" />
-    <Compile Include="Strategies\MethodCacheStrategy.cs" />
-    <Compile Include="Expressions\ExpressionAnalyzer.cs" />
-    <Compile Include="Parameter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)*.dll" "$(SolutionDir)FluentCache-nuget\lib\portable-net45+netcore45" /Y /I
-xcopy "$(TargetDir)*.xml" "$(SolutionDir)FluentCache-nuget\lib\portable-net45+netcore45" /Y /I
-xcopy "$(TargetDir)*.dll" "$(SolutionDir)FluentCache-nuget\lib\netcore45" /Y /I
-xcopy "$(TargetDir)*.xml" "$(SolutionDir)FluentCache-nuget\lib\netcore45" /Y /I
-xcopy "$(TargetDir)*.dll" "$(SolutionDir)FluentCache-nuget\lib\net45" /Y /I
-xcopy "$(TargetDir)*.xml" "$(SolutionDir)FluentCache-nuget\lib\net45" /Y /I</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

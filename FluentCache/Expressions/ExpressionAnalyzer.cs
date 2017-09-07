@@ -54,8 +54,8 @@ namespace FluentCache.Expressions
             if (methodCallExpression == null)
                 throw new ArgumentNullException("methodCallExpression");
 
-            //Get the region from the calling type
-            string region = methodCallExpression.Method.DeclaringType.Name;
+            //Get the region from the cache source
+            string region = cache.Source.GetType().Name;
 
             //Get the operation name
             string baseKey = methodCallExpression.Method.Name;
@@ -73,8 +73,8 @@ namespace FluentCache.Expressions
             if (memberExpression == null)
                 throw new ArgumentNullException("memberExpression");
 
-            //Get the region from the calling type
-            string region = memberExpression.Member.DeclaringType.Name;
+            //Get the region from the cache source
+            string region = cache.Source.GetType().Name;
 
             //Get the member name
             string member = memberExpression.Member.Name;

@@ -1,4 +1,6 @@
-# FluentCache - A Fluent Library for Caching in C-Sharp
+# FluentCache ![](https://raw.githubusercontent.com/cordialgerm/FluentCache/master/FluentCache_24.png)
+
+## A Library for Fluent Caching in C&#35;
 
 FluentCache is a simple, fluent library to help you write clean, legible caching code by reducing boilerplate.
 
@@ -7,13 +9,26 @@ double ezResult = cache.Method(r => r.DoSomeHardParameterizedWork(parameter))
                        .GetValue();
 ```
 
-FluentCache automatically analyzes the expression tree and generates a unique cache key from the type, method, and any parameters and creates a caching policy that you can store or immediately execute. You can also specify various caching policies such as time-to-live, error handling, and cache invalidation.
+|Package|Status|
+|---|---|
+|FluentCache |![FluentCache](https://buildstats.info/nuget/FluentCache)|
+|FluentCache.RuntimeCaching |![](https://buildstats.info/nuget/FluentCache.RuntimeCaching)|
+|FluentCache.Microsoft.Extensions.Caching.Abstractions |![](https://buildstats.info/nuget/FluentCache.Microsoft.Extensions.Caching.Abstractions)|
+|FluentCache.Microsoft.Extensions.Caching.Memory |![](https://buildstats.info/nuget/FluentCache.Microsoft.Extensions.Caching.Memory)|
+|FluentCache.Microsoft.Extensions.Caching.Redis |![](https://buildstats.info/nuget/FluentCache.Microsoft.Extensions.Caching.Redis)|
+
+**Features**:
+
+* **Fluent API**: clean, simple API to encapsulate caching logic
+* **Automatic Cache Key Generation**: refactor at will and never worry about magic strings. FluentCache automatically analyzes the expression tree and generates caching keys based on the type, method, and parameters
+* **Caching policies**: specify caching policies like expiration, validation, and error handling
+* **Cache Implementations**: FluentCache supports common caching implementations and has a simple ICache interface to support other providers
 
 Here's an example of some typical caching code that can be replaced by FluentCache:
 
 ```csharp
-//I want to retrieve a value from my cache, and if it's not there load it from the repository 
-Repository repository = new Repository();
+//retrieve a value from the cache. If it's not there, load it from the repository 
+var repository = new Repository();
 int parameter = 5;
 string region = "FluentCacheExamples";
 string cacheKey = "Samples.DoSomeHardParameterizedWork." + parameter;
@@ -26,51 +41,87 @@ if (cachedValue == null)
 }
 double result = cachedValue.Value;
 ```
+There are several issues with this code:
 
-This code is full of boilerplate, magic strings, and is hard to read. The *intent* of the code is overwhelmed by the mechanics of how to cache the value. I hope the method names and parameters don't change, otherwise I have to remember to update the cache key!
+* **boilerplate**: duplicating this code is tedious
+* **magic strings**: the cache key is based on magic strings that won't automatically refactor as methods and parameters change
+* **hard to read**: the intent is overwhelmed by the mechanics
 
-# Examples:
+## Examples:
 
+
+### Cache Expiration Policies
 ```csharp
-//You can specify cache expiration policies
 double ttlValue = cache.Method(r => r.DoSomeHardWork())
                        .ExpireAfter(TimeSpan.FromMinutes(5))
                        .GetValue();
+```
 
-//It supports asyn/await natively
+### Async/Await Retrieval
+```csharp
 double asyncValue = await cache.Method(r => r.DoSomeHardWorkAsync())
                                .GetValueAsync();
+```
 
-//You can specify validation strategies to customize when caches should be updated
+### Validation Strategies
+```csharp
 double onlyCachePositiveValues = cache.Method(r => r.DoSomeHardWork())
                                       .InvalidateIf(cachedVal => cachedVal.Value <= 0d)
                                       .GetValue();
+```
 
-//You can clear existing cached values
+### Clearing Values
+```csharp
 cache.Method(r => r.DoSomeHardParameterizedWork(parameter))
      .ClearValue();
 ```
 
-# Getting Started
 
-To get started, you need to choose a FluentCache implementation. FluentCache supports the following cache implementations out of the box:
-* ```FluentDictionaryCache``` which is a wrapper around Dictionary<string,object>
-* ```FluentMemoryCache``` which is a wrapper around ```System.Runtime.Caching.MemoryCache```
+## Getting Started
 
-Other cache implementations can implement the FluentCache.Cache base class
+### Hello World
 
-In this example, we will use the FluentMemoryCache to illustrate the various Fluent extension methods provided by the API
+To get started, we will use the `FluentDictionaryCache` to illustrate the various Fluent extension methods provided by the API
 
 ```csharp
-ICache myCache = FluentCache.RuntimeCaching.FluentMemoryCache.Default();
+//use the simplest cache, which wraps a dictionary
+//other cache implementations are provided in additional nuget packages
+ICache myCache = new FluentCache.Simple.FluentDictionaryCache();
 
-//Now that we have our cache, we're going to create a wrapper around our Repository
-//The wrapper will allow us to cache the results of various Repository methods
+//create a wrapper around our Repository
+//wrapper will allow us to cache the results of various Repository methods
 Repository repo = new Repository();
 Cache<Repository> myRepositoryCache = myCache.WithSource(repo);
 
-//Now that we have a wrapper, we can create and execute a CacheStrategy using many convenient Fluent Extension methods
+//create and execute a CacheStrategy using Fluent Extension methods
 string resource = myRepositoryCache.Method(r => r.RetrieveResource())
                                    .ExpireAfter(TimeSpan.FromMinutes(30))
                                    .GetValue();
 ```
+
+### Implementations
+
+| Cache Implementation | FluentCache Type | NuGet Package |
+|---|---|---|
+|`ConcurrentDictionary` | `FluentDictionaryCache` | `FluentCache` |
+|`System.Runtime.Caching.MemoryCache`|`FluentMemoryCache`|`FluentCache.RuntimeCaching`|
+|`Microsoft.Extensions.Caching.Memory.MemoryCache`| `FluentMemoryCache` | `FluentCache.Microsoft.Extensions.Caching.Memory`|
+|`Microsoft.Extensions.Caching.Redis.RedisCache` | `FluentRedisCache` | `FluentCache.Microsoft.Extensions.Caching.Redis`|
+|`Microsoft.Extensions.Caching.Memory.IMemoryCache`| `FluentIMemoryCache` | `FluentCache.Microsoft.Extensions.Caching.Abstractions`|
+|`Microsoft.Extensions.Caching.Distributed.IDistributedCache` | `FluentIDistributedCache` | `FluentCache.Microsoft.Extensions.Caching.Abstractions`|
+
+Other caches can implement the `FluentCache.ICache` interface
+
+## New in v4
+
+1. Support for .NET Standard 2.0
+1. New implementations for `Microsoft.Extensions.Caching`
+   1. `Microsoft.Extensions.Caching.Memory.IMemoryCache` added to `FluentCache.Microsoft.Extensions.Caching.Abstractions` nuget package
+   1. `Microsoft.Extensions.Caching.Memory.MemoryCache` added to `FluentCache.Microsoft.Extensions.Caching.Memory` nuget package
+   1. `Microsoft.Extensions.Caching.Distributed.IDistributedCache` added to `FluentCache.Microsoft.Extensions.Caching.Abstractions` nuget package
+   1. `Microsoft.Extensions.Caching.Redis.RedisCache` added to `FluentCache.Microsoft.Extensions.Caching.Redis` nuget package
+1. Support for caching methods on generic repositories
+
+The previous `FluentCache.Redis` package is deprecated in favor of `FluentCache.Microsoft.Extensions.Caching.Redis`
+
+
