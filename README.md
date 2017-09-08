@@ -11,11 +11,11 @@ double ezResult = cache.Method(r => r.DoSomeHardParameterizedWork(parameter))
 
 |Package|Status|
 |---|---|
-|FluentCache |![FluentCache](https://buildstats.info/nuget/FluentCache)|
-|FluentCache.RuntimeCaching |![](https://buildstats.info/nuget/FluentCache.RuntimeCaching)|
-|FluentCache.Microsoft.Extensions.Caching.Abstractions |![](https://buildstats.info/nuget/FluentCache.Microsoft.Extensions.Caching.Abstractions)|
-|FluentCache.Microsoft.Extensions.Caching.Memory |![](https://buildstats.info/nuget/FluentCache.Microsoft.Extensions.Caching.Memory)|
-|FluentCache.Microsoft.Extensions.Caching.Redis |![](https://buildstats.info/nuget/FluentCache.Microsoft.Extensions.Caching.Redis)|
+|[FluentCache](https://www.nuget.org/packages/FluentCache) |![FluentCache](https://buildstats.info/nuget/FluentCache)|
+|[FluentCache.RuntimeCaching](https://www.nuget.org/packages/FluentCache.RuntimeCaching) |![](https://buildstats.info/nuget/FluentCache.RuntimeCaching)|
+|[FluentCache.Microsoft.Extensions.Caching.Abstractions](https://www.nuget.org/packages/FluentCache.Microsoft.Extensions.Caching.Abstractions) |![](https://buildstats.info/nuget/FluentCache.Microsoft.Extensions.Caching.Abstractions)|
+|[FluentCache.Microsoft.Extensions.Caching.Memory](https://www.nuget.org/packages/FluentCache.Microsoft.Extensions.Caching.Memory) |![](https://buildstats.info/nuget/FluentCache.Microsoft.Extensions.Caching.Memory)|
+|[FluentCache.Microsoft.Extensions.Caching.Redis](https://www.nuget.org/packages/FluentCache.Microsoft.Extensions.Caching.Redis) |![](https://buildstats.info/nuget/FluentCache.Microsoft.Extensions.Caching.Redis)|
 
 **Features**:
 
