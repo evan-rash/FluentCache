@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.2</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Version>4.0.0.1</Version>
     <Authors>Evan Rash</Authors>
     <Company />
@@ -20,7 +20,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn />
-    <DocumentationFile>bin\Debug\netstandard1.2\FluentCache.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\FluentCache.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>
