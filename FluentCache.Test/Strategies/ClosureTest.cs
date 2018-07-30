@@ -30,8 +30,7 @@ namespace FluentCache.Test
 
             ExpressionAnalyzer analyzer = new ExpressionAnalyzer();
 
-            object parameterValue;
-            bool dontIgnore = analyzer.TryProcessParameter(source, invocationCall.Arguments.First(), checkForParameterDoNotCache: true, parameterValue:  out parameterValue);
+            bool dontIgnore = analyzer.TryProcessParameter(source, invocationCall.Arguments.First(), checkForParameterDoNotCache: true, parameterValue: out object parameterValue);
             if (!dontIgnore)
                 Assert.Fail("Should not have been ignore");
 

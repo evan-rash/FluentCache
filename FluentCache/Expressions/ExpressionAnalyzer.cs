@@ -11,27 +11,6 @@ namespace FluentCache.Expressions
 {
     internal class ExpressionAnalyzer
     {
-        public object GetMemberSource<T>(T parameterSource, MemberExpression memberExpression)
-        {
-            if (memberExpression.Expression == null)
-            {
-                //This is a static member
-                return null;
-            }
-            else if (memberExpression.Expression is ConstantExpression)
-            {
-                var sourceExpression = memberExpression.Expression as ConstantExpression;
-                return sourceExpression.Value;
-            }
-            else if (memberExpression.Expression is ParameterExpression)
-            {
-                //The member source is a parameter
-                //In this case we just return parameterSource
-                return parameterSource;
-            }
-
-            throw UnableToProcessMemberSource(memberExpression);
-        }
 
         private List<object> GetMethodParameters<T>(Cache<T> cache, MethodCallExpression methodCallExpression)
         {
@@ -39,8 +18,7 @@ namespace FluentCache.Expressions
             List<object> parameters = new List<object>();
             foreach (Expression parameterExpression in methodCallExpression.Arguments)
             {
-                object parameter;
-                if (!TryProcessParameter(cache.Source, parameterExpression, checkForParameterDoNotCache: true, parameterValue: out parameter))
+                if (!TryProcessParameter(cache.Source, parameterExpression, checkForParameterDoNotCache: true, parameterValue: out object parameter))
                     continue;
 
                 parameters.Add(parameter);
@@ -73,6 +51,12 @@ namespace FluentCache.Expressions
             if (memberExpression == null)
                 throw new ArgumentNullException("memberExpression");
 
+            //check to be sure that the member expression is not nested
+            //if this is a nested property, then memberExpression.Expression will not be a TypedParameterExpression
+            if (memberExpression.Expression.NodeType != ExpressionType.Parameter)
+                throw NestedMemberExpression(memberExpression);
+
+
             //Get the region from the cache source
             string region = cache.Source.GetType().Name;
 
@@ -93,12 +77,10 @@ namespace FluentCache.Expressions
 
             CacheStrategyIncomplete incompleteStrat = null;
 
-            var methodCallExpression = method.Body as MethodCallExpression;
-            if (methodCallExpression != null)
+            if (method.Body is MethodCallExpression methodCallExpression)
                 incompleteStrat = CreateCacheStrategyFromMethod(cache, methodCallExpression);
 
-            var memberExpression = method.Body as MemberExpression;
-            if (memberExpression != null)
+            if (method.Body is MemberExpression memberExpression)
                 incompleteStrat = CreateCacheStrategyFromMember(cache, memberExpression);
 
             if (incompleteStrat == null)
@@ -117,8 +99,7 @@ namespace FluentCache.Expressions
 
             CacheStrategyIncomplete incompleteStrat = null;
 
-            var methodCallExpression = method.Body as MethodCallExpression;
-            if (methodCallExpression != null)
+            if (method.Body is MethodCallExpression methodCallExpression)
                 incompleteStrat = CreateCacheStrategyFromMethod(cache, methodCallExpression);
 
             //Note: we purposely do not support MemberExpressions here because a task-returning property would be a very strange design...
@@ -135,12 +116,15 @@ namespace FluentCache.Expressions
         public bool TryProcessParameter<T>(T source, Expression parameterExpression, bool checkForParameterDoNotCache, out object parameterValue)
         {
             parameterValue = null;
-
-            if (parameterExpression is MethodCallExpression)
+            if (parameterExpression is ConstantExpression constantExpression)
+            {
+                parameterValue = constantExpression.Value;
+                return true;
+            }
+            else if (parameterExpression is MethodCallExpression parameterCallExpression)
             {
                 //Check for Parameter.DoNotCache()
                 //Ignore this parameter
-                MethodCallExpression parameterCallExpression = (MethodCallExpression)parameterExpression;
                 if (checkForParameterDoNotCache && parameterCallExpression.Method.DeclaringType == typeof(Parameter)
                     && parameterCallExpression.Method.Name == "DoNotCache")
                 {
@@ -148,43 +132,19 @@ namespace FluentCache.Expressions
                 }
                 else
                 {
-                    throw UnableToProcessParameter(parameterCallExpression);
-                }
-            }
-            else if (parameterExpression is ConstantExpression)
-            {
-                var constantExpression = (ConstantExpression)parameterExpression;
-                parameterValue = constantExpression.Value;
-                return true;
-            }
-            else if (parameterExpression is MemberExpression)
-            {
-                var memberExpression = (MemberExpression)parameterExpression;
-
-                object memberSource = GetMemberSource(source, memberExpression);
-
-                var memberInfo = memberExpression.Member;
-                if (memberInfo is System.Reflection.PropertyInfo)
-                {
-                    var propInfo = (System.Reflection.PropertyInfo)memberInfo;
-                    parameterValue = propInfo.GetValue(memberSource);
+                    parameterValue = EvaluateParameterExpression(parameterExpression);
                     return true;
-                }
-                else if (memberInfo is System.Reflection.FieldInfo)
-                {
-                    var fieldInfo = (System.Reflection.FieldInfo)memberInfo;
-                    parameterValue = fieldInfo.GetValue(memberSource);
-                    return true;
-                }
-                else
-                {
-                    throw UnableToProcessParameter(parameterExpression);
                 }
             }
             else
             {
-                throw UnableToProcessParameter(parameterExpression);
+                parameterValue = EvaluateParameterExpression(parameterExpression);
+                return true;
             }
+        }
+        private static object EvaluateParameterExpression(Expression parameterExpression)
+        {
+            return Expression.Lambda(parameterExpression).Compile().DynamicInvoke();
         }
 
         private BulkCacheStrategyIncomplete<TKey, TResult> CreateBulkCacheStrategyFromMethod<T, TKey, TResult>(Cache<T> cache, MethodCallExpression methodCallExpression)
@@ -198,9 +158,8 @@ namespace FluentCache.Expressions
             if (methodCallExpression.Arguments.Count < 1)
                 throw UnableToProcessBulkMethod<TKey>(methodCallExpression);
 
-            object parameterValue;
             Expression parameterExpression = methodCallExpression.Arguments.First();
-            if (!TryProcessParameter<T>(cache.Source, parameterExpression, checkForParameterDoNotCache: false, parameterValue: out parameterValue))
+            if (!TryProcessParameter(cache.Source, parameterExpression, checkForParameterDoNotCache: false, parameterValue: out object parameterValue))
                 throw UnableToProcessBulkMethod<TKey>(methodCallExpression);
 
             ICollection<TKey> keys = parameterValue as ICollection<TKey>;
@@ -210,11 +169,8 @@ namespace FluentCache.Expressions
             List<object> otherParameters = new List<object>();
             foreach (Expression otherParameter in methodCallExpression.Arguments.Skip(1))
             {
-                object otherParameterValue;
-                if (!TryProcessParameter<T>(cache.Source, otherParameter, checkForParameterDoNotCache: true, parameterValue: out otherParameterValue))
-                    throw UnableToProcessParameter(otherParameter);
-
-                otherParameters.Add(otherParameterValue);
+                if (TryProcessParameter(cache.Source, otherParameter, checkForParameterDoNotCache: true, parameterValue: out object otherParameterValue))
+                    otherParameters.Add(otherParameterValue);
             }
 
             return new BulkCacheStrategyIncomplete<TKey, TResult>(cache, baseKey, keys)
@@ -264,18 +220,6 @@ namespace FluentCache.Expressions
             return strat;
         }
 
-        private FluentCacheException UnableToProcessParameter(Expression parameterExpression)
-        {
-            return new InvalidCachingExpressionException(String.Format("Unable to parse parameter '{0}'. Only constant expressions, member expressions, and Parameter.DoNotCache() are allowed", parameterExpression.ToString()));
-        }
-        private FluentCacheException UnableToProcessMethodCallSource(MethodCallExpression methodCallExpression)
-        {
-            return new InvalidCachingExpressionException(String.Format("Unable to parse method '{0}'. Unable to determine the source value. Methods may only be called on constant expressions", methodCallExpression.ToString()));
-        }
-        private FluentCacheException UnableToProcessMemberSource(MemberExpression memberExpression)
-        {
-            return new InvalidCachingExpressionException(String.Format("Unable to parse member '{0}'. Unable to determine the source value. Members may only be called on constant expressions", memberExpression.ToString()));
-        }
         private FluentCacheException UnsupportedExpression(Expression expression)
         {
             string message = String.Format("Unsupported expression type '{0}'. May only cache expressions of type MethodCallExpression", expression.GetType().Name);
@@ -284,6 +228,11 @@ namespace FluentCache.Expressions
         private FluentCacheException UnableToProcessBulkMethod<TKey>(MethodCallExpression methodCallExpression)
         {
             return new InvalidCachingExpressionException(String.Format("Unable to parse method '{0}'. Unable to determine the keys parameter. The method must accept at least one parameter, and the first parameter must be ICollection<{1}>", methodCallExpression, typeof(TKey).Name));
+        }
+        private FluentCacheException NestedMemberExpression(MemberExpression expression)
+        {
+            string message = $"Unsupported expression '{expression.ToString()}'. Caching of nested members is not supported";
+            return new InvalidCachingExpressionException(message);
         }
     }
 }

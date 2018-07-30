@@ -75,7 +75,7 @@ namespace FluentCache.Strategies
         public void SetValue(TKey key, TResult value)
         {
             string itemKey = GetItemKey(key);
-            Cache.Set(itemKey, Region, value, Expiration);
+            Cache.Set(itemKey, Region, value, DefaultExpiration);
         }
 
         /// <summary>

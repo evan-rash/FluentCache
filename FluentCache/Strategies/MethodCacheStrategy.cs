@@ -34,7 +34,7 @@ namespace FluentCache.Strategies
         /// <param name="value">The value to be cached</param>
         public void SetValue(TResult value)
         {
-            Cache.Set(Key, Region, value, Expiration);
+            Cache.Set(Key, Region, value, ResolveExpiration(value));
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace FluentCache.Strategies
         /// <param name="value">The value to be cached</param>
         public void SetValue(TResult value)
         {
-            Cache.Set(Key, Region, value, Expiration);
+            Cache.Set(Key, Region, value, ResolveExpiration(value));
         }
 
         /// <summary>

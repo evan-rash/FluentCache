@@ -40,19 +40,14 @@ namespace FluentCache.Execution
         /// Gets the cache that will be used to retrieve the value
         /// </summary>
         public ICache Cache { get { return _cache; } }
-        
-        /// <summary>
-        /// Gets the expiration policy
-        /// </summary>
-        public CacheExpiration Expiration { get { return _cacheStrategy.Expiration; } }
-        
+              
         /// <summary>
         /// Retrieves the value if it is not in the cache
         /// </summary>
         protected virtual CachedValue<T> RetrieveCachedValue(CachedValue<T> previousCachedValue)
         {
             T value = _cacheStrategy.Retrieve(previousCachedValue);
-            return Cache.Set(Key, Region, value, Expiration);
+            return Cache.Set(Key, Region, value, _cacheStrategy.ResolveExpiration(value));
         }
 
         /// <summary>
@@ -64,7 +59,7 @@ namespace FluentCache.Execution
                 throw new InvalidOperationException("Specified cache strategy must be an instance of ICacheStrategyAsync<T>");
 
             T value = await _cacheStrategyAsync.RetrieveAsync(previousCachedValue);
-            return Cache.Set(Key, Region, value, Expiration);
+            return Cache.Set(Key, Region, value, _cacheStrategyAsync.ResolveExpiration(value));
         }
         
         /// <summary>

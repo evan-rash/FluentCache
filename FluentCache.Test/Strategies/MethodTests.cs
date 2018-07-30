@@ -1,72 +1,119 @@
-﻿using FluentCache.Strategies;
+﻿using FluentCache.Expressions;
+using FluentCache.Strategies;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FluentCache.Test
 {
-    [TestClass]
-    public class MethodTests
+    public class MethodTestsArguments
     {
-        public const string TestConstant = "http://www.google.com";
-        public string TestField = TestConstant;
-        public string TestProperty { get { return TestField; } }
-        public string TestMethod()
+        public const string Constant = "boo!";
+        public string Field = Constant;
+
+        public string Property { get { return Field; } }
+        public string Method()
         {
-            return TestConstant;
+            return Constant;
         }
 
-        public readonly static string TestStaticField = TestConstant;
-        public static string TestStaticProperty { get { return TestStaticField; } }
+        public readonly static string StaticField = Constant;
 
-        private Cache<MethodTests> CreateCache()
+        public static string StaticProperty { get { return StaticField; } }
+    }
+
+    public class NestedProperty
+    {
+        public string Property1 => "Hello";
+        public string Property2 => "World";
+    }
+
+    public class MethodTestsRepository
+    {
+        public MethodTestsRepository()
         {
-            return new FluentCache.Simple.FluentDictionaryCache().WithSource(this);
+            Field = Method();
         }
 
-        private double CalculateSomeWork()
+        public double Field;
+        public double Property => Method();
+
+        public NestedProperty NestedProperty => new NestedProperty();
+
+        public double Method()
         {
             return Math.Sqrt(1234);
         }
 
-        private double CalculateSomeWork(int power)
+        public double Method1Parameter(int power)
         {
             return Math.Pow(Math.E, power);
         }
 
-        private double CalculateSomeWork(int num, string text)
+        public double MethodTwoParameters(int num, string text)
         {
             return Math.Pow(Math.E, num) + text.GetHashCode();
         }
 
-        private async Task<string> DownloadTextAsync(string url)
+        public async Task<string> MethodAsync(string text)
         {
-            using (var client = new HttpClient())
-            {
-                return await client.GetStringAsync(url);
-            }
+            await Task.Delay(TimeSpan.FromSeconds(0.25));
+            return text;
         }
+
+        public int MethodEnumerableParameter<T>(IEnumerable<T> item)
+        {
+            return item == null ? 0 : item.Count();
+        }
+    }
+
+    [TestClass]
+    public class MethodTests
+    {
+
+        private Cache<MethodTestsRepository> CreateCache()
+        {
+            return new FluentCache.Simple.FluentDictionaryCache().WithSource(new MethodTestsRepository());
+        }
+
         
-        private int GetItemCount<T>(IEnumerable<T> item)
-        {
-            return item == null? 0 : item.Count();
-        }
-
-
-
         [TestMethod]
-        public void CacheMethod_Member()
+        public void CacheMethod_Member_Property()
         {
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("TestProperty")
-                                                    .WithRegion("MethodTests");
+            CacheStrategyIncomplete expected = cache.WithKey("Property")
+                                                    .WithRegion(nameof(MethodTestsRepository));
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.TestProperty);
+            CacheStrategy cacheStrategy = cache.Method(r => r.Property);
+
+            Assert.AreEqual(expected.Key, cacheStrategy.Key);
+            Assert.AreEqual(expected.Region, cacheStrategy.Region);
+
+        }
+
+        [TestMethod, ExpectedException(typeof(InvalidCachingExpressionException))]
+        public void CacheMethod_Member_NestedProperty()
+        {
+            var cache = CreateCache();
+
+            //we expect this to fail because caching of nested properties is not supported
+            CacheStrategy cacheStrategy = cache.Method(r => r.NestedProperty.Property1);
+
+        }
+
+        [TestMethod]
+        public void CacheMethod_Member_Field()
+        {
+            var cache = CreateCache();
+
+            CacheStrategyIncomplete expected = cache.WithKey("Field")
+                                                    .WithRegion(nameof(MethodTestsRepository));
+
+            CacheStrategy cacheStrategy = cache.Method(r => r.Field);
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
             Assert.AreEqual(expected.Region, cacheStrategy.Region);
@@ -79,10 +126,10 @@ namespace FluentCache.Test
         {
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithRegion("MethodTests");
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                    .WithRegion(nameof(MethodTestsRepository));
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(Parameter.DoNotCache<string>()));
+            CacheStrategy cacheStrategy = cache.Method(r => r.MethodAsync(Parameter.DoNotCache<string>()));
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
             Assert.AreEqual(expected.Region, cacheStrategy.Region);
@@ -93,10 +140,10 @@ namespace FluentCache.Test
         {
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(TestConstant);
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                    .WithParameters(MethodTestsArguments.Constant);
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(TestConstant));
+            CacheStrategy cacheStrategy = cache.Method(r => r.MethodAsync(MethodTestsArguments.Constant));
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
         }
@@ -106,10 +153,12 @@ namespace FluentCache.Test
         {
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(TestField);
+            var args = new MethodTestsArguments();
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(t.TestField));
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                    .WithParameters(args.Field);
+
+            CacheStrategy cacheStrategy = cache.Method(r => r.MethodAsync(args.Field));
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
         }
@@ -119,10 +168,11 @@ namespace FluentCache.Test
         {
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(TestProperty);
+            var args = new MethodTestsArguments();
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                    .WithParameters(args.Property);
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(t.TestProperty));
+            CacheStrategy cacheStrategy = cache.Method(r => r.MethodAsync(args.Property));
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
         }
@@ -132,10 +182,10 @@ namespace FluentCache.Test
         {
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(TestStaticField);
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                    .WithParameters(MethodTestsArguments.StaticField);
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(TestStaticField));
+            CacheStrategy cacheStrategy = cache.Method(r => r.MethodAsync(MethodTestsArguments.StaticField));
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
 
@@ -146,10 +196,10 @@ namespace FluentCache.Test
         {
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(TestStaticProperty);
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                    .WithParameters(MethodTestsArguments.StaticProperty);
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(TestStaticProperty));
+            CacheStrategy cacheStrategy = cache.Method(r => r.MethodAsync(MethodTestsArguments.StaticProperty));
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
         }
@@ -157,14 +207,14 @@ namespace FluentCache.Test
         [TestMethod]
         public void CacheMethod_Method_LocalParameter()
         {
-            string url = TestConstant;
+            string localParameter = MethodTestsArguments.Constant;
 
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(url);
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                    .WithParameters(localParameter);
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(url));
+            CacheStrategy cacheStrategy = cache.Method(r => r.MethodAsync(localParameter));
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
         }
@@ -172,14 +222,44 @@ namespace FluentCache.Test
         [TestMethod]
         public void CacheMethod_Method_ClosureParameter()
         {
-            const string url = TestConstant;
+            const string localParameter = MethodTestsArguments.Constant;
 
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(url);
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                    .WithParameters(localParameter);
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(url));
+            CacheStrategy cacheStrategy = cache.Method(t => t.MethodAsync(localParameter));
+
+            Assert.AreEqual(expected.Key, cacheStrategy.Key);
+        }
+
+        [TestMethod]
+        public void CacheMethod_Method_LambdaParameter()
+        {
+            var cache = CreateCache();
+
+            Func<string> testLambda = () => MethodTestsArguments.Constant;
+
+
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                   .WithParameters(testLambda());
+
+            CacheStrategy cacheStrategy = cache.Method(t => t.MethodAsync(testLambda()));
+
+            Assert.AreEqual(expected.Key, cacheStrategy.Key);
+        }
+
+        [TestMethod]
+        public void CacheMethod_Method_MethodParameter()
+        {
+            var args = new MethodTestsArguments();
+            var cache = CreateCache();
+
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                   .WithParameters(args.Method());
+
+            CacheStrategy cacheStrategy = cache.Method(t => t.MethodAsync(args.Method()));
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
         }
@@ -187,16 +267,16 @@ namespace FluentCache.Test
         [TestMethod]
         public void CacheMethod_Method_ArgumentParameter()
         {
-            DoTestCacheMethod_KeyAndRegion_ArgumentParameter(TestConstant);
+            DoTestCacheMethod_KeyAndRegion_ArgumentParameter(MethodTestsArguments.Constant);
         }
-        private void DoTestCacheMethod_KeyAndRegion_ArgumentParameter(string url)
+        private void DoTestCacheMethod_KeyAndRegion_ArgumentParameter(string argument)
         {
             var cache = CreateCache();
 
-            CacheStrategyIncomplete expected = cache.WithKey("DownloadTextAsync")
-                                                    .WithParameters(url);
+            CacheStrategyIncomplete expected = cache.WithKey("MethodAsync")
+                                                    .WithParameters(argument);
 
-            CacheStrategy cacheStrategy = cache.Method(t => t.DownloadTextAsync(url));
+            CacheStrategy cacheStrategy = cache.Method(r => r.MethodAsync(argument));
 
             Assert.AreEqual(expected.Key, cacheStrategy.Key);
 
@@ -212,9 +292,9 @@ namespace FluentCache.Test
             var arg3 = new string[] { "a", "b", "c" };
 
 
-            var strat1 = cache.Method(r => r.GetItemCount(arg1));
-            var strat2 = cache.Method(r => r.GetItemCount(arg2));
-            var strat3 = cache.Method(r => r.GetItemCount(arg3));
+            var strat1 = cache.Method(r => r.MethodEnumerableParameter(arg1));
+            var strat2 = cache.Method(r => r.MethodEnumerableParameter(arg2));
+            var strat3 = cache.Method(r => r.MethodEnumerableParameter(arg3));
 
 
             Assert.IsTrue(strat1.Key.Contains("[a,b,c]"), "IEnumerable<string> parameter should be rendered as a list");
@@ -232,32 +312,12 @@ namespace FluentCache.Test
             Assert.AreEqual(cache1.CachedDate, cache3.CachedDate);
         }
 
-        [TestMethod, ExpectedException(typeof(Expressions.InvalidCachingExpressionException))]
-        public void CacheMethod_Method_LambdaParameter()
-        {
-            var cache = CreateCache();
-
-            Func<string> testLambda = () => TestConstant;
-
-            //We expect this to fail because the parser doesn't know how to evaluate a lamda
-            cache.Method(t => t.DownloadTextAsync(testLambda()));
-        }
-
-        [TestMethod, ExpectedException(typeof(Expressions.InvalidCachingExpressionException))]
-        public void CacheMethod_Method_MethodParameter()
-        {
-            var cache = CreateCache();
-
-            //We expect this to fail because the parser doesn't know how to evaluate a method
-            cache.Method(t => t.DownloadTextAsync(t.TestMethod()));
-        }
-
         [TestMethod]
         public void CacheMethod_Method_GetValue()
         {
             var cache = CreateCache();
 
-            CacheStrategy<double> strat = cache.Method(t => t.CalculateSomeWork());
+            CacheStrategy<double> strat = cache.Method(r => r.Method());
 
             double result = strat.GetValue();
 
@@ -267,14 +327,14 @@ namespace FluentCache.Test
         [TestMethod]
         public async Task CacheMethod_Method_GetValue_IgnoreParameter()
         {
-            string url = "http://www.google.com";
-            string url2 = "http://www.cnn.com";
+            string arg1 = "hello";
+            string arg2 = "world";
 
             var cache = CreateCache();
 
-            CacheStrategyAsync<string> strat1 = cache.Method(t => t.DownloadTextAsync(Parameter.DoNotCache(url)));
+            CacheStrategyAsync<string> strat1 = cache.Method(t => t.MethodAsync(Parameter.DoNotCache(arg1)));
 
-            CacheStrategyAsync<string> strat2 = cache.Method(t => t.DownloadTextAsync(Parameter.DoNotCache(url2)));
+            CacheStrategyAsync<string> strat2 = cache.Method(t => t.MethodAsync(Parameter.DoNotCache(arg2)));
 
             Assert.AreEqual(strat1.Key, strat2.Key, "Both strategies should have the same key because the parameter should be ignored");
 
@@ -288,11 +348,25 @@ namespace FluentCache.Test
         }
 
         [TestMethod]
-        public async Task CacheMethod_Method_GetValueAsync()
+        public async Task CacheMethod_Method_GetValueAsync_PropertyArgument()
         {
             var cache = CreateCache();
+            var args = new MethodTestsArguments();
 
-            CacheStrategyAsync<string> strat = cache.Method(t => t.DownloadTextAsync(t.TestProperty));
+            CacheStrategyAsync<string> strat = cache.Method(t => t.MethodAsync(args.Property));
+
+            string result = await strat.GetValueAsync();
+
+            Assert.AreNotEqual(null, result);
+        }
+
+        [TestMethod]
+        public async Task CacheMethod_Method_GetValueAsync_LocalArgument()
+        {
+            var cache = CreateCache();
+            var arg = new MethodTestsArguments().Property;
+
+            CacheStrategyAsync<string> strat = cache.Method(t => t.MethodAsync(arg));
 
             string result = await strat.GetValueAsync();
 
@@ -312,7 +386,7 @@ namespace FluentCache.Test
                 return result;
             };
 
-            CacheStrategy<double> cacheStrategy = cache.Method(t => t.CalculateSomeWork())
+            CacheStrategy<double> cacheStrategy = cache.Method(t => t.Method())
                                                         .RetrieveUsing(doSomeWork);
 
             Assert.AreNotEqual(default(double), cacheStrategy.GetValue());
@@ -331,7 +405,7 @@ namespace FluentCache.Test
 
             double val = 100d;
 
-            CacheStrategy<double> strat = cache.Method(t => t.CalculateSomeWork());
+            CacheStrategy<double> strat = cache.Method(t => t.Method());
 
             strat.SetValue(100d);
             Assert.AreEqual(val, strat.GetValue());

@@ -92,7 +92,7 @@ namespace FluentCache.RuntimeCaching
                 };
 
                 var cachePolicy = new CacheItemPolicy();
-                if (cacheExpiration.SlidingExpiration != null)
+                if (cacheExpiration?.SlidingExpiration != null)
                     cachePolicy.SlidingExpiration = cacheExpiration.SlidingExpiration.GetValueOrDefault();
 
                 MemoryCache.Add(k, storage, cachePolicy);

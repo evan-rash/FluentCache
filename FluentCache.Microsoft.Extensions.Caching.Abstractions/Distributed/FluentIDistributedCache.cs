@@ -68,7 +68,7 @@ namespace FluentCache.Microsoft.Extensions.Caching.Distributed
                 storage.Value = serializedValue;
             }
 
-            var options = new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = cacheExpiration.SlidingExpiration };
+            var options = new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = cacheExpiration?.SlidingExpiration };
             DistributedCache.Set(k, storage.ToBytes(Serializer), options);
 
             return storage.ToCachedValue<T>(Serializer);

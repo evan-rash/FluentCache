@@ -22,9 +22,9 @@ namespace FluentCache
         string Region { get; }
 
         /// <summary>
-        /// Gets the expiration policy
+        /// Resolves the expiration policy for the value that will be cached
         /// </summary>
-        CacheExpiration Expiration { get; }
+        CacheExpiration ResolveExpiration(T value);
 
         /// <summary>
         /// Validates an existing cached value

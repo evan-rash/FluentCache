@@ -38,20 +38,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentCache, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentCache.4.0.0.1\lib\netstandard1.2\FluentCache.dll</HintPath>
+    <Reference Include="FluentCache, Version=4.0.0.2, Culture=neutral, PublicKeyToken=5db91e06989d6fcb, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentCache.4.0.0.2\lib\netstandard1.1\FluentCache.dll</HintPath>
     </Reference>
-    <Reference Include="FluentCache.Microsoft.Extensions.Caching.Abstractions, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentCache.Microsoft.Extensions.Caching.Abstractions.4.0.0.1\lib\netstandard2.0\FluentCache.Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+    <Reference Include="FluentCache.Microsoft.Extensions.Caching.Abstractions, Version=4.0.0.2, Culture=neutral, PublicKeyToken=5db91e06989d6fcb, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentCache.Microsoft.Extensions.Caching.Abstractions.4.0.0.2\lib\netstandard2.0\FluentCache.Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="FluentCache.Microsoft.Extensions.Caching.Memory, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentCache.Microsoft.Extensions.Caching.Memory.4.0.0.1\lib\netstandard2.0\FluentCache.Microsoft.Extensions.Caching.Memory.dll</HintPath>
+    <Reference Include="FluentCache.Microsoft.Extensions.Caching.Memory, Version=4.0.0.2, Culture=neutral, PublicKeyToken=5db91e06989d6fcb, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentCache.Microsoft.Extensions.Caching.Memory.4.0.0.2\lib\netstandard2.0\FluentCache.Microsoft.Extensions.Caching.Memory.dll</HintPath>
     </Reference>
-    <Reference Include="FluentCache.Microsoft.Extensions.Caching.Redis, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentCache.Microsoft.Extensions.Caching.Redis.4.0.0.1\lib\netstandard2.0\FluentCache.Microsoft.Extensions.Caching.Redis.dll</HintPath>
+    <Reference Include="FluentCache.Microsoft.Extensions.Caching.Redis, Version=4.0.0.2, Culture=neutral, PublicKeyToken=5db91e06989d6fcb, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentCache.Microsoft.Extensions.Caching.Redis.4.0.0.2\lib\netstandard2.0\FluentCache.Microsoft.Extensions.Caching.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="FluentCache.RuntimeCaching, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentCache.RuntimeCaching.4.0.0.1\lib\netstandard2.0\FluentCache.RuntimeCaching.dll</HintPath>
+    <Reference Include="FluentCache.RuntimeCaching, Version=4.0.0.2, Culture=neutral, PublicKeyToken=5db91e06989d6fcb, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentCache.RuntimeCaching.4.0.0.2\lib\netstandard2.0\FluentCache.RuntimeCaching.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">

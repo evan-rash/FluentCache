@@ -138,6 +138,36 @@ namespace FluentCache.Test.Implementations
             Assert.AreEqual(0, result1.Version, "The 2nd call should have expired. Expired items are removed, so we don't expect the version to have incremented");
         }
         
+        public async Task Method_ExpireAfter_Callback(Cache<Example> cache)
+        {
+            TimeSpan wait1 = TimeSpan.FromSeconds(1.25);
+            TimeSpan wait2 = TimeSpan.FromSeconds(0.75);
+
+            Func<double, TimeSpan> waitCallback = d => d < 1.0 ? wait1 : wait2;
+
+            CacheStrategy<double> strategy = cache.Method(c => c.CalculateSomeWork())
+                                                  .ExpireAfter(waitCallback);
+
+            DateTime firstCacheDate = default(DateTime);
+            strategy.Get();
+            for (int i = 1; i < 10; i++)
+            {
+                CachedValue<double> result = strategy.Get();
+                Assert.AreEqual(0L, result.Version, "These calls should be cached");
+
+                var wait = waitCallback(result.Value);
+                await Task.Delay(TimeSpan.FromSeconds(wait.TotalSeconds / 5.0));
+
+                firstCacheDate = result.CachedDate;
+            }
+
+            await Task.Delay(wait1 + wait2);
+
+            CachedValue<double> expiredResult = strategy.Get();
+
+            Assert.AreNotEqual(firstCacheDate, expiredResult.CachedDate, "This call should have expired after waiting");
+        }
+
         public async Task Method_ExpireAfter(Cache<Example> cache)
         {
             TimeSpan wait = TimeSpan.FromSeconds(1);
