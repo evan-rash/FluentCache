@@ -75,7 +75,7 @@ namespace FluentCache.Strategies
                     string itemKey = GetItemKey(result.Key);
                     TResult value = result.Value;
 
-                    CachedValue<TResult> cachedValue = Cache.Set(itemKey, Region, value, Expiration);
+                    CachedValue<TResult> cachedValue = Cache.Set(itemKey, Region, value, DefaultExpiration);
 
                     results.Add(cachedValue);
                 }

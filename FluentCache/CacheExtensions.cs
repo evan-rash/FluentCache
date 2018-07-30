@@ -78,13 +78,33 @@ namespace FluentCache
         }
 
         /// <summary>
-        /// Updates a caching strategy to use the specified sliding absolute expiration date
+        /// Updates a caching strategy to use the specified sliding expiration date
         /// </summary>
         public static TPlan ExpireAfter<TPlan>(this TPlan source, TimeSpan expireAfter) where TPlan : CacheStrategy
         {
-            source.Expiration = source.Expiration.ExpireAfter(expireAfter);
+            source.DefaultExpiration = new CacheExpiration(expireAfter);
             return source;
 
+        }
+
+        /// <summary>
+        /// Updates a caching strategy to use the specified sliding expiration expiration callback
+        /// </summary>
+        public static CacheStrategy<TResult> ExpireAfter<TResult>(this CacheStrategy<TResult> source, Func<TResult, TimeSpan> expireAfterCallback)
+        {
+            Func<object, CacheExpiration> callback = obj => new CacheExpiration(expireAfterCallback((TResult)obj));
+            source.ExpirationCallback = callback;
+            return source;
+        }
+
+        /// <summary>
+        /// Updates a caching strategy to use the specified sliding expiration expiration callback
+        /// </summary>
+        public static CacheStrategyAsync<TResult> ExpireAfter<TResult>(this CacheStrategyAsync<TResult> source, Func<TResult, TimeSpan> expireAfterCallback)
+        {
+            Func<object, CacheExpiration> callback = obj => new CacheExpiration(expireAfterCallback((TResult)obj));
+            source.ExpirationCallback = callback;
+            return source;
         }
 
         /// <summary>

@@ -93,7 +93,16 @@ namespace FluentCache.Strategies
         /// <param name="value">The value to be cached</param>
         public void SetValue(T value)
         {
-            Cache.Set(Key, Region, value, Expiration);
+            Cache.Set(Key, Region, value, ResolveExpiration(value));
+        }
+
+        /// <summary>
+        /// Resolves the Expiration that this caching policy will use when caching items
+        /// </summary>
+        public CacheExpiration ResolveExpiration(T value)
+        {
+            return base.ResolveExpiration(value);
+
         }
 
         CacheValidationResult ICacheStrategy<T>.Validate(CachedValue<T> existingValue)

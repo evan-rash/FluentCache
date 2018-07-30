@@ -33,7 +33,7 @@ namespace FluentCache.Simple
                 return null;
 
             DateTime now = DateTime.UtcNow;
-            if (now - storage.LastAccessedDate > storage.Expiration.SlidingExpiration)
+            if (now - storage.LastAccessedDate > storage.Expiration?.SlidingExpiration)
             {
                 Dictionary.TryRemove(k, out storage);
                 return null;

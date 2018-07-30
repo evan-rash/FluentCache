@@ -34,9 +34,9 @@ namespace FluentCache.Strategies
 
         internal virtual void CopyFrom(CacheStrategy other)
         {
-            this.Expiration = other.Expiration;
+            this.DefaultExpiration = other.DefaultExpiration;
             this.Region = other.Region;
-            this.Parameters = other.Parameters == null ? null : other.Parameters.ToList();
+            this.Parameters = other.Parameters?.ToList();
         }
 
         /// <summary>
@@ -47,7 +47,17 @@ namespace FluentCache.Strategies
         /// <summary>
         /// Gets the Expiration that this caching policy will use when caching items
         /// </summary>
-        public CacheExpiration Expiration { get; internal set; }
+        public CacheExpiration DefaultExpiration { get; internal set; }
+
+        /// <summary>
+        /// Gets the ExpirationCallback that this caching policy will use when caching items
+        /// </summary>
+        public Func<object, CacheExpiration> ExpirationCallback { get; internal set; }
+
+        internal CacheExpiration ResolveExpiration(object result)
+        {
+            return ExpirationCallback?.Invoke(result) ?? DefaultExpiration;
+        }
 
         /// <summary>
         /// Gets the Key that this caching policy will using when caching items

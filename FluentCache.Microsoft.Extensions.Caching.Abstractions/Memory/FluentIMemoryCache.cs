@@ -56,7 +56,7 @@ namespace FluentCache.Microsoft.Extensions.Caching.Memory
                     Value = value
                 };
 
-                var options = new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = cacheExpiration.SlidingExpiration };
+                var options = new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = cacheExpiration?.SlidingExpiration };
                 MemoryCache.Set(k, storage, options);
             }
 

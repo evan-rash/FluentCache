@@ -51,6 +51,11 @@ namespace FluentCache.Test
                                    .ExpireAfter(TimeSpan.FromMinutes(5))
                                    .GetValue();
 
+            //You can specify dynamic cache expiration policies
+            double ttlValue2 = cache.Method(r => r.DoSomeHardWork())
+                                    .ExpireAfter(d => d <= 2.0 ? TimeSpan.FromMinutes(5) : TimeSpan.FromMinutes(2))
+                                    .GetValue();
+
             //It supports asyn/await natively
             double asyncValue = await cache.Method(r => r.DoSomeHardWorkAsync())
                                            .GetValueAsync();

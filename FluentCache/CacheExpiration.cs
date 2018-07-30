@@ -10,64 +10,33 @@ namespace FluentCache
     /// <summary>
     /// Defines a policy for how values should be expired
     /// </summary>
-    public struct CacheExpiration
+    public class CacheExpiration
     {
-        ///// <summary>
-        ///// Creates a cache policy with the specified sliding expiration and expiration date
-        ///// </summary>
-        //public CachePolicy(TimeSpan? slidingExpiration, DateTime? expirationDate)
-        //{
-        //    _SlidingExpiration = slidingExpiration;
-        //    _ExpirationDate = expirationDate;
-        //}
+
+        /// <summary>
+        /// Creates a new default cache policy with no expiration
+        /// </summary>
+        public CacheExpiration()
+            : this(null)
+        {
+
+        }
 
         /// <summary>
         /// Creates a cache policy with the specified sliding expiration
         /// </summary>
         public CacheExpiration(TimeSpan? slidingExpiration)
         {
-            _SlidingExpiration = slidingExpiration;
-            //_ExpirationDate = null;
+            _slidingExpiration = slidingExpiration;
         }
 
-        ///// <summary>
-        ///// Creates a cache policy with the specified expiration date
-        ///// </summary>
-        //public CachePolicy(DateTime? expirationDate)
-        //{
-        //    _ExpirationDate = expirationDate;
-        //    _SlidingExpiration = null;
-        //}
-
-        private readonly TimeSpan? _SlidingExpiration;
-        //private readonly DateTime? _ExpirationDate;
+        private readonly TimeSpan? _slidingExpiration;
 
         /// <summary>
-        /// Returns a new caching policy with the specified sliding expiration period
+        /// Resolves the sliding expiration duration for a cached item
         /// </summary>
-        public CacheExpiration ExpireAfter(TimeSpan timeSpan)
-        {
-            return new CacheExpiration(timeSpan);
-        }
+        public TimeSpan? SlidingExpiration => _slidingExpiration;
 
-        ///// <summary>
-        ///// Returns a new cache policy with the specified expiration date
-        ///// </summary>
-        //public CachePolicy ExpireOn(DateTime expireOn)
-        //{
-        //    if (expireOn.Kind != DateTimeKind.Utc)
-        //        throw new ArgumentException("expireOn must be a UTC date", "expireOn");
-        //    return new CachePolicy(this.SlidingExpiration, expireOn);
-        //}
-
-        /// <summary>
-        /// Gets the sliding expiration duration for a cached item
-        /// </summary>
-        public TimeSpan? SlidingExpiration { get { return _SlidingExpiration; } }
         
-        ///// <summary>
-        ///// Gets the absolute expiration date for a cached item
-        ///// </summary>
-        //public DateTime? ExpirationDate { get { return _ExpirationDate; } }
     }
 }

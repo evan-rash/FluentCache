@@ -14,6 +14,8 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>Cache Fluent Microsoft.Extensions.Caching.Memory MemoryCache</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/cordialgerm/FluentCache/master/FluentCache.png</PackageIconUrl>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>signature.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
