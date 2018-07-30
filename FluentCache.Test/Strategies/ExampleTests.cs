@@ -10,19 +10,19 @@ namespace FluentCache.Test
     [TestClass]
     public class ExampleTests
     {
-        private Cache<Repository> CreateCache()
+        private Cache<ExampleTestsRepository> CreateCache()
         {
-            return new FluentCache.Simple.FluentDictionaryCache().WithSource(new Repository());
+            return new FluentCache.Simple.FluentDictionaryCache().WithSource(new ExampleTestsRepository());
         }
 
         [TestMethod]
         public async Task BasicExample()
         {
-            Cache<Repository> cache = CreateCache();
+            Cache<ExampleTestsRepository> cache = CreateCache();
 
             //Here's an example of some typical caching code
             //I want to retrieve a value from my cache, and if it's not there load it from the repository 
-            Repository repository = new Repository();
+            var repository = new ExampleTestsRepository();
             int parameter = 5;
             string region = "FluentCacheExamples";
             string cacheKey = "Samples.DoSomeHardParameterizedWork." + parameter;
@@ -78,8 +78,8 @@ namespace FluentCache.Test
             
             //Now that we have our cache, we're going to create a wrapper around our Repository
             //The wrapper will allow us to cache the results of various Repository methods
-            Repository repo = new Repository();
-            Cache<Repository> myRepositoryCache = myCache.WithSource(repo);
+            var repo = new ExampleTestsRepository();
+            Cache<ExampleTestsRepository> myRepositoryCache = myCache.WithSource(repo);
 
             //Now that we have a wrapper, we can create and execute a CacheStrategy
             string resource = myRepositoryCache.Method(r => r.RetrieveResource())
@@ -88,7 +88,7 @@ namespace FluentCache.Test
         }
     }
 
-    public class Repository
+    public class ExampleTestsRepository
     {
         public double DoSomeHardWork()
         {
