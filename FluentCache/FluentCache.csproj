@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
-    <Version>4.0.0.1</Version>
+    <Version>4.0.0.2</Version>
     <Authors>Evan Rash</Authors>
     <Company />
     <PackageLicenseUrl>https://github.com/cordialgerm/FluentCache/blob/master/LICENSE</PackageLicenseUrl>
@@ -15,6 +15,8 @@
     <PackageIconUrl>https://raw.githubusercontent.com/cordialgerm/FluentCache/master/FluentCache.png</PackageIconUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>signature.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyVersion>4.0.0.2</AssemblyVersion>
+    <FileVersion>4.0.0.2</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

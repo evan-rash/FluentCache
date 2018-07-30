@@ -112,6 +112,12 @@ string resource = myRepositoryCache.Method(r => r.RetrieveResource())
 
 Other caches can implement the `FluentCache.ICache` interface
 
+## New in v4.0.2
+
+1. `.ExpireAfter()` now supports a callback for determining sliding expiration based on cached value
+1. `FluentCache` now only requires .NET Standard 1.1
+1. Assemblies are signed
+
 ## New in v4
 
 1. Support for .NET Standard 2.0
