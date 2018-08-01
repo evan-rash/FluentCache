@@ -410,5 +410,28 @@ namespace FluentCache.Test
             strat.SetValue(100d);
             Assert.AreEqual(val, strat.GetValue());
         }
+
+        [TestMethod]
+        public void CacheMethod_Method_Validate()
+        {
+            var cache = CreateCache();
+
+            var strat1 = cache.Method(t => t.Method())
+                              .Validate(cv => CacheValidationResult.Valid);
+
+            var val1 = strat1.Get();
+            var val2 = strat1.Get();
+            Assert.AreEqual(0, val1.Version);
+            Assert.AreEqual(0, val2.Version);
+            strat1.ClearValue();
+
+            var strat2 = cache.Method(t => t.Method())
+                              .Validate(cv => CacheValidationResult.Invalid);
+
+            var val3 = strat2.Get();
+            var val4 = strat2.Get();
+            Assert.AreEqual(0, val3.Version);
+            Assert.AreEqual(1, val4.Version);
+        }
     }
 }
