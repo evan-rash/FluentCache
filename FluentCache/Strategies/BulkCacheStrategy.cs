@@ -55,6 +55,9 @@ namespace FluentCache.Strategies
                 string itemKey = GetItemKey(key);
                 CacheStrategy<TResult> itemStrategy = new CacheStrategy<TResult>(Cache, itemKey).WithRegion(Region);
 
+                if (RetrieveCallback != null)
+                    itemStrategy = itemStrategy.RetrieveUsing(() => RetrieveCallback(new[] { key }).First().Value);
+
                 if (ValidateCallback != null)
                     itemStrategy = itemStrategy.Validate(ValidateCallback);
 
