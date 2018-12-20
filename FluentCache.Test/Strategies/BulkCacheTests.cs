@@ -145,7 +145,18 @@ namespace FluentCache.Test
                 Assert.IsTrue(cachedItem.CachedDate > notCachedBefore, "No items should have been cached. Item with value {0} was cached on {1} and should not have been cached before {2}", cachedItem.Value, cachedItem.CachedDate, notCachedBefore);
         }
 
+        [TestMethod]
+        public void Bulk_CacheOperation_ResultsCorrect()
+        {
+            var cache = CreateCache();
 
+            var nums = new List<int> { 1, 2, 3 };
+
+            var expected = cache.Source.GetExponents(nums).Select(p => p.Value).ToArray();
+            var actual = cache.Method(t => t.GetExponents(nums)).GetAllValues().ToArray();
+
+            CollectionAssert.AreEquivalent(expected, actual, "Results from cache should have matched results from source.");
+        }
     }
 
     public class BulkCacheOperations
