@@ -157,6 +157,20 @@ namespace FluentCache.Test
 
             CollectionAssert.AreEquivalent(expected, actual, "Results from cache should have matched results from source.");
         }
+
+        [TestMethod]
+        public async Task Bulk_CacheOperationAsync_ResultsCorrect()
+        {
+            var cache = CreateCache();
+
+            var nums = new List<int> { 1, 2, 3 };
+
+            var expected = cache.Source.GetExponents(nums).Select(p => p.Value).ToArray();
+            var awaitedActual = await cache.Method(t => t.GetExponentsAsync(nums)).GetAllValuesAsync();
+            var actual = awaitedActual.ToArray();
+
+            CollectionAssert.AreEquivalent(expected, actual.ToArray(), "Results from cache should have matched results from source.");
+        }
     }
 
     public class BulkCacheOperations
