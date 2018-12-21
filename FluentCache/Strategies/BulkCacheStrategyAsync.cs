@@ -78,13 +78,7 @@ namespace FluentCache.Strategies
                 CacheStrategyAsync<TResult> itemStrategy = new CacheStrategyAsync<TResult>(Cache, itemKey).WithRegion(Region);
 
                 if (RetrieveCallback != null)
-                {
-                    itemStrategy = itemStrategy.RetrieveUsingAsync(async () =>
-                    {
-                        var awaitedResults = await RetrieveCallback(new[] { key });
-                        return awaitedResults.First().Value;
-                    });
-                }
+                    itemStrategy = itemStrategy.RetrieveUsingAsync(async () => (await RetrieveCallback(new[] { key })).First().Value);
 
                 if (ValidateCallback != null)
                     itemStrategy = itemStrategy.ValidateAsync(ValidateCallback);
