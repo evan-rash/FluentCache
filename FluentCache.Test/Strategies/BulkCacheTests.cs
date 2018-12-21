@@ -166,10 +166,9 @@ namespace FluentCache.Test
             var nums = new List<int> { 1, 2, 3 };
 
             var expected = cache.Source.GetExponents(nums).Select(p => p.Value).ToArray();
-            var awaitedActual = await cache.Method(t => t.GetExponentsAsync(nums)).GetAllValuesAsync();
-            var actual = awaitedActual.ToArray();
+            var actual = (await cache.Method(t => t.GetExponentsAsync(nums)).GetAllValuesAsync()).ToArray();
 
-            CollectionAssert.AreEquivalent(expected, actual.ToArray(), "Results from cache should have matched results from source.");
+            CollectionAssert.AreEquivalent(expected, actual, "Results from cache should have matched results from source.");
         }
     }
 
